@@ -80,16 +80,15 @@ const CENTER_TOLERANCE = 20
 const MIN_DISTANCE_SCORE = 70
 
 const retakePhoto = () => {
-  // Clear the captured image
   capturedImage.value = null
   imageCaptured.value = false
-  
-  // Reset status indicators
   faceDistanceScore.value = 0
   isFaceCentered.value = false
   faceDetected.value = false
   
-  // Restart the camera
+  // Emit event to parent
+  emit('retake')
+  
   stopCamera()
   startCamera()
 }

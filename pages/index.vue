@@ -56,6 +56,7 @@
       ref="cameraComponent"
       @captured="onImageCaptured" 
       @error="onCameraError" 
+         @retake="handleRetake" 
     />
         </div>
 
@@ -95,18 +96,18 @@
 
       <!-- Action Buttons -->
         <div class="w-full flex gap-2">
-        <button 
-          type="button" 
-          class="w-full rounded-lg text-white px-2 py-2" 
-          :class="{
-            'bg-blue-500 hover:bg-blue-600': imageCaptured,
-            'bg-gray-400 cursor-not-allowed': !imageCaptured
-          }" 
-          :disabled="!imageCaptured"
-          @click="handleNext"
-        >
-          {{ buttonText }}
-        </button>
+       <button 
+  type="button" 
+  class="w-full rounded-lg text-white px-2 py-2" 
+  :class="{
+    'bg-blue-500 hover:bg-blue-600': imageCaptured,
+    'bg-gray-400 cursor-not-allowed': !imageCaptured
+  }" 
+  :disabled="!imageCaptured"
+  @click="handleNext"
+>
+  {{ buttonText }}
+</button>
       </div>
     </div>
   </div>
@@ -185,6 +186,10 @@ function setupResizeListener() {
 
   // Add resize listener
   window.addEventListener('resize', updateDeviceInfo);
+}
+
+const handleRetake = () => {
+  imageCaptured.value = false // This will disable the Next button
 }
 
 async function checkLocationPermission() {
