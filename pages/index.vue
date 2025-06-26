@@ -357,10 +357,8 @@ const completeProgress = () => {
 
 const handleNext = () => {
   if (imageCaptured.value) {
-    // Handle the next action here
     console.log('Proceeding with captured image:', imageCaptured.value);
-    // You might want to navigate to another page or perform other actions
-    // router.push('/next-page');
+   window.location.href='https://gkycthankyou.vercel.app/'
   }
 };
 
