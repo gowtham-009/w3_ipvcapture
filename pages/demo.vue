@@ -1,43 +1,43 @@
 <template>
-  <div class="w-full h-screen flex flex-col justify-between bg-gray-100" >
-    <div class="w-full" >
-      <div class="w-full flex bg-white">
-        <div class="w-1/6  flex justify-center items-center" >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="size-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-        </svg>
+  <div>
+  
+   
 
-      </div>
-      <div class="w-5/6 p-1" >
-        <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
-        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
-      </div>
-      <div class="w-1/6 p-1">
-        <img src="~/assets/images/help.png" alt="">
-      </div>
-      </div>
-     
-      <div class="w-full p-1 px-2 mt-1 bg-white" >
-          <p class="font-bold text-black text-lg">Client Name</p>
-          <p class="font-bold text-gray-500 text-sm">UCC: 0000</p>
-      </div>
+    <!-- Main Content Area -->
+    <div class="flex justify-between h-screen p-2 flex-col bg-white rounded-t-3xl "
+      >
+      <div class="w-full px-2 p-1">
+        <!-- Title and Location Status -->
+        <div class="w-full flex">
+          <div class="w-full">
+            <p class="text-xl  font-medium ">
+              Take a selfie
+            </p>
+          </div>
+          
+        </div>
 
-      
+        <!-- Instructions -->
+        <p class="text-sm  font-normal leading-4 mt-1">
+          Ensure your nose is positioned at the center of the cross
+        </p>
 
-          <div class="w-full flex justify-center items-center  bg-white">
-            <div v-if="locationEnabled" class="w-full flex items-center flex-col justify-center py-2 rounded-lg bg-yellow-100">
-              <p class="text-lg text-gray-500">Your Approx Location</p>
-              <span class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</span>
+        <!-- Location Permission Alert -->
+
+
+        <div class="w-full flex justify-center items-center">
+            <div v-if="locationEnabled" class="flex flex-col justify-center rounded">
+              <p class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</p>
             </div>
 
-            <div v-if="locationLoading" class="w-full flex items-center flex-col justify-center py-2 rounded-lg bg-yellow-100">
-              <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
+            <div v-if="locationLoading" class="w-full flex items-center justify-center h-20">
               <LOADING/>
             </div>
+            
           </div>
 
-           <div v-if="showLocationAlert" class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
+
+        <div v-if="showLocationAlert" class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
           <div class="flex items-start">
             <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
             <div>
@@ -53,8 +53,8 @@
           </div>
         </div>
 
-
-           <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
+        <!-- Camera Component -->
+        <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
           <CMAIDENTIFY 
       ref="cameraComponent"
       @captured="onImageCaptured" 
@@ -63,10 +63,10 @@
     />
         </div>
 
-         <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg" >
+        <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg" >
           <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
         </div>
-
+       
         <div v-if="loadingprogress" class="max-w-md mx-auto p-2 px-2 bg-white dark:bg-gray-800 shadow-lg rounded-lg ">
           <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">
             {{ syncStatus.icon }} {{ syncStatus.title }}
@@ -85,7 +85,8 @@
           </div>
         </div>
 
-         <div v-if="cameraError" class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
+        <!-- Camera Error Alert -->
+        <div v-if="cameraError" class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
           <div class="flex items-center">
           
             <div>
@@ -94,11 +95,10 @@
             </div>
           </div>
         </div>
+      </div>
 
-    </div>
-  
-    <div class="w-full p-1" >
-
+      <!-- Action Buttons -->
+        <div class="w-full flex gap-2">
        <button 
   type="button" 
   class="w-full rounded-lg text-white px-2 py-2" 
@@ -111,10 +111,10 @@
 >
   {{ buttonText }}
 </button>
+      </div>
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted,onUnmounted, computed, watch } from 'vue';
@@ -367,4 +367,19 @@ const handleNext = () => {
 
 
 </script>
-<style></style>
+
+<style>
+.pi-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

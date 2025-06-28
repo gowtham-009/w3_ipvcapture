@@ -19,7 +19,7 @@
     </div>
 
     <!-- Status indicators -->
-    <div class="status-indicators mt-1 text-center">
+    <div class="status-indicators mt-1 text-center bg-yellow-100">
       <div class="">
         <span class="font-medium">Position: </span>
         <span :class="{
@@ -48,7 +48,7 @@
     <button 
       v-if="imageCaptured"
       @click="retakePhoto"
-      class="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+      class="mt-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
     >
       Retake Photo
     </button>
@@ -338,7 +338,7 @@ onMounted(async () => {
 
 .status-indicators {
   min-width: 250px;
-  background: rgba(0, 0, 0, 0.05);
+ 
   padding: 1%;
   border-radius: 8px;
 }

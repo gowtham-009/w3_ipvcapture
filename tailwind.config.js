@@ -9,7 +9,23 @@ module.exports = {
     "./app.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'google-bounce': 'google-bounce 1.4s infinite ease-in-out both',
+      },
+      keyframes: {
+        'google-bounce': {
+          '0%, 80%, 100%': { 
+            transform: 'scale(0)',
+            opacity: '0.5'
+          },
+          '40%': { 
+            transform: 'scale(1)',
+            opacity: '1'
+          },
+        }
+      }
+    }
   },
   plugins: [],
 }
