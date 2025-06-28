@@ -3,7 +3,8 @@
     <div class="w-full flex-1 overflow-hidden">
       <div class="w-full flex bg-white">
         <div class="w-1/6 flex justify-center items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </div>
@@ -17,7 +18,7 @@
           </button>
         </div>
       </div>
-     
+
       <!-- Scrollable content container -->
       <div class="w-full h-full overflow-y-auto" style="max-height: calc(100vh - 120px);">
         <div class="w-full p-1 px-2 mt-1 bg-white">
@@ -26,27 +27,32 @@
         </div>
 
         <div class="w-full flex justify-center items-center bg-white">
-          <div v-if="locationEnabled" class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
+          <div v-if="locationEnabled"
+            class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
             <p class="text-lg text-gray-500">Your Approx Location</p>
             <span class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</span>
           </div>
 
-          <div v-if="locationLoading" class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
+          <div v-if="locationLoading"
+            class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
             <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
-            <LOADING/>
+            <LOADING />
           </div>
         </div>
 
-       
 
-        <div v-if="showLocationAlert" class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
+
+        <div v-if="showLocationAlert"
+          class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
           <div class="flex items-start">
             <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
             <div>
               <p class="font-bold">Location Access Required</p>
-              <p class="mt-1">We need your location to verify your identity. Please enable location services in your {{ device }} settings.</p>
+              <p class="mt-1">We need your location to verify your identity. Please enable location services in your {{
+                device }} settings.</p>
               <div class="flex gap-2 mt-3">
-                <button @click="requestLocation" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                <button @click="requestLocation"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                   <i class="pi pi-refresh mr-1"></i> Try Again
                 </button>
               </div>
@@ -55,16 +61,11 @@
         </div>
 
         <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
-           <div class="w-full bg-yellow-100 rounded-lg px-1 py-2">
-          <p class="text-lg text-gray-500 leading-5">Ensure your nose is positioned at the center of the cross</p>
-        </div>
-          <CMAIDENTIFY 
-          class="mt-1"
-            ref="cameraComponent"
-            @captured="onImageCaptured" 
-            @error="onCameraError" 
-            @retake="handleRetake" 
-          />
+          <div class="w-full bg-yellow-100 rounded-lg px-1 py-2">
+            <p class="text-lg text-gray-500 leading-5">Ensure your nose is positioned at the center of the cross</p>
+          </div>
+          <CMAIDENTIFY class="mt-1" ref="cameraComponent" @captured="onImageCaptured" @error="onCameraError"
+            @retake="handleRetake" />
         </div>
 
         <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg">
@@ -99,18 +100,12 @@
         </div>
       </div>
     </div>
-  
+
     <div class="w-full p-1">
-      <button 
-        type="button" 
-        class="w-full rounded-lg text-white px-2 py-2" 
-        :class="{
-          'bg-blue-500 hover:bg-blue-600': imageCaptured,
-          'bg-gray-400 cursor-not-allowed': !imageCaptured
-        }" 
-        :disabled="!imageCaptured"
-        @click="handleNext"
-      >
+      <button type="button" class="w-full rounded-lg text-white px-2 py-2" :class="{
+        'bg-blue-500 hover:bg-blue-600': imageCaptured,
+        'bg-gray-400 cursor-not-allowed': !imageCaptured
+      }" :disabled="!imageCaptured" @click="handleNext">
         {{ buttonText }}
       </button>
     </div>
@@ -118,22 +113,38 @@
 
   <TransitionRoot as="template" :show="open">
     <Dialog class="relative z-10" @close="open = false">
-      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
+        leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
       </TransitionChild>
 
       <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div class="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
-          <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+          <TransitionChild as="template" enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+             <div class="w-full flex justify-end">
+                  <button type="button"
+                    class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
+                    @click="open = false" ref="cancelButtonRef">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                  </button>
+                </div>
               <div>
+                
                 <div class="mt-3 flex justify-center sm:mt-5">
                   <img src="~/assets/images/imgrule.jpg" alt="Rules">
                 </div>
               </div>
-              <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:col-start-1 sm:mt-0" @click="open = false" ref="cancelButtonRef">Cancel</button>
-              </div>
+
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -145,7 +156,7 @@
 
 
 <script setup>
-import { ref, onMounted,onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 import { useRouter, useRoute } from 'vue-router';
@@ -160,8 +171,8 @@ const buttonText = ref("Next");
 
 const open = ref(false)
 const isButtonClicked = ref(false)
-const ipverror=ref(false)
-const ipvlimiterror=ref('')
+const ipverror = ref(false)
+const ipvlimiterror = ref('')
 
 const locationEnabled = ref(false);
 const locationLoading = ref(true);
@@ -180,9 +191,9 @@ const loadingprogress = ref(false)
 
 
 
-const device=ref('Desktop')
+const device = ref('Desktop')
 
-const route=useRoute()
+const route = useRoute()
 onMounted(() => {
   locationLoading.value = true;
   setupResizeListener();
@@ -211,7 +222,7 @@ onUnmounted(() => {
 // Methods
 function setupResizeListener() {
   const updateDeviceInfo = () => {
-   
+
     device.value = window.innerWidth <= 992 ? 'Mobile' : 'Desktop';
   };
 
@@ -239,7 +250,7 @@ async function checkLocationPermission() {
     if (navigator.permissions) {
       const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
       handlePermissionState(permissionStatus.state);
-      
+
       permissionStatus.onchange = () => {
         handlePermissionState(permissionStatus.state);
       };
@@ -264,7 +275,7 @@ function handlePermissionState(state) {
 }
 
 function getLocationWithTimeout(isRepeated = false) {
-  
+
   navigator.geolocation.getCurrentPosition(
     (position) => {
       handleLocationSuccess(position);
@@ -390,16 +401,16 @@ const completeProgress = () => {
 
 
 
-const router=useRouter()
+const router = useRouter()
 
 
 
 
 const ipvfunction = async () => {
-   ipverror.value=false
-  if(!imageCaptured.value){
-    ipverror.value=true
-    ipvlimiterror.value="Ipv image invalid"
+  ipverror.value = false
+  if (!imageCaptured.value) {
+    ipverror.value = true
+    ipvlimiterror.value = "Ipv image invalid"
     return
   }
   loadingprogress.value = true
@@ -410,18 +421,18 @@ const ipvfunction = async () => {
 
 
   try {
- 
-   const formData = new FormData();
+
+    const formData = new FormData();
 
 
-const base64Data = imageCaptured.value.split(',')[1] || imageCaptured.value;
-formData.append('fileData', base64Data);
-  
+    const base64Data = imageCaptured.value.split(',')[1] || imageCaptured.value;
+    formData.append('fileData', base64Data);
+
 
 
     const uploadResponse = await fetch(apiurl, {
       method: 'POST',
-     
+
       body: formData,
     });
 
@@ -432,27 +443,27 @@ formData.append('fileData', base64Data);
 
     const data = await uploadResponse.json();
 
-    if (data.is_real == true ) {
+    if (data.is_real == true) {
       localStorage.setItem('ipv', data.req_id)
-    completeProgress();
+      completeProgress();
       router.push('/thankyoupage')
     }
   } catch (error) {
- 
+
     console.error('IPv Upload Failed:', error.message);
   }
 };
 
 
 const handleNext = () => {
- if(route.query.clientname && route.query.clientcode){
-  ipvfunction()
- }
- else{
-  alert('Client code exist')
-//  ipverror.value=true
-//  ipvlimiterror.value="Client code exist"
- }
+  if (route.query.clientname && route.query.clientcode) {
+    ipvfunction()
+  }
+  else {
+    alert('Client code exist')
+    //  ipverror.value=true
+    //  ipvlimiterror.value="Client code exist"
+  }
 };
 
 
@@ -464,13 +475,16 @@ const handleNext = () => {
 .scroll-container::-webkit-scrollbar {
   width: 6px;
 }
+
 .scroll-container::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 .scroll-container::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 3px;
 }
+
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
