@@ -168,7 +168,7 @@ const cameraComponent = ref(null);
 const buttonText = ref("SAVE & PROCEED");
 
 const open = ref(false)
-const isButtonClicked = ref(false)
+
 const ipverror = ref(false)
 const ipvlimiterror = ref('')
 
