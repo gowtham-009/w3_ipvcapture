@@ -72,7 +72,7 @@
           <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
         </div>
 
-        <div v-if="loadingprogress" class="max-w-md mx-auto  px-2 bg-white  shadow-lg rounded-lg">
+        <div v-if="loadingprogress" class="max-w-md mx-auto mt-2 px-2 bg-white  shadow-lg rounded-lg">
          
 
           <p class="text-gray-600  mb-1">
