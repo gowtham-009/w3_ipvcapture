@@ -165,7 +165,7 @@ import LOADING from '~/components/googleloading.vue';
 const cameraComponent = ref(null);
 
 
-const buttonText = ref("Next");
+const buttonText = ref("SAVE & PROCEED");
 
 const open = ref(false)
 const isButtonClicked = ref(false)
