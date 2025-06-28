@@ -72,12 +72,10 @@
           <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
         </div>
 
-        <div v-if="loadingprogress" class="max-w-md mx-auto p-2 px-2 bg-white  shadow-lg rounded-lg">
-          <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">
-            {{ syncStatus.icon }} {{ syncStatus.title }}
-          </h2>
+        <div v-if="loadingprogress" class="max-w-md mx-auto  px-2 bg-white  shadow-lg rounded-lg">
+         
 
-          <p class="text-gray-600  mb-2">
+          <p class="text-gray-600  mb-1">
             {{ syncStatus.message }}
           </p>
 
