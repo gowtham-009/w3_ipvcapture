@@ -19,7 +19,7 @@
     </div>
 
     <!-- Status indicators -->
-    <div class="status-indicators mt-1 text-center bg-yellow-100">
+    <div class="status-indicators mt-1 w-full text-center bg-yellow-100">
       <div class="">
         <span class="font-medium">Position: </span>
         <span :class="{
@@ -44,15 +44,25 @@
       </div>
     </div>
 
-    <!-- Retake button (only shown after capture) -->
-    <button 
-      v-if="imageCaptured"
+    <div class="mt-1 w-full text-center p-1 flex justify-center items-center gap-2" v-if="imageCaptured">
+      <p class="text-md font-medium text-gray-500">
+        Not happy with your selfie?
+      </p>
+       <button 
+      
       @click="retakePhoto"
-      class="mt-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+      class="mt-1 bg-blue-500 px-1 py-1 text-white rounded-md hover:bg-blue-600 transition-colors"
     >
       Retake Photo
     </button>
+    </div>
+
+    <!-- Retake button (only shown after capture) -->
+   
   </div>
+
+
+  
 </template>
 
 <script setup>

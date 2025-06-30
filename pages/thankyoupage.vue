@@ -1,70 +1,182 @@
 <template>
-  <div class="w-full h-screen flex flex-col justify-between bg-gray-100">
-    <div class="w-full">
-      <div class="w-full flex bg-white">
-        <div class="w-1/6 flex justify-center items-center">
-          <span @click="goBack">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-              class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-            </svg>
-          </span>
-        </div>
-        <div class="w-5/6 p-1">
-          <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
-          <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
-        </div>
-        <div class="w-1/6 p-1">
-          <button @click="open = true">
-            <img 
-              src="~/assets/images/help.png" 
-              alt="Help" 
-              width="100" 
-              height="100"
-            >
-          </button>
-        </div>
+  <div class="container" :style="{ height: deviceHeight + 'px' }">
+    <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
+      <div class="w-1/6 flex justify-center items-center">
+        <span @click="goBack">
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+          class="size-5 font-bold">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        </span>
+       
       </div>
-     
-      <div class="w-full p-1 px-2 mt-1 bg-white">
-        <p class="font-bold text-black text-lg">Client Name</p>
-        <p class="font-bold text-gray-500 text-sm">UCC: 0000</p>
+      <div class="w-5/6 p-1">
+        <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
+        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
       </div>
+      <div class="w-1/6 p-1">
+        <button @click="open = true">
+          <img src="~/assets/images/help-icon.png" alt="Help" width="100" height="100">
+        </button>
+      </div>
+    </div>
+    <div class="center-box">
+      <div class="scroll-content">
+        <div class="w-full p-1 px-4 mt-1  bg-white">
+          <p class="font-bold text-black text-lg">Client Name</p>
+          <p class="font-bold text-gray-500 text-sm">UCC: 0000</p>
+        </div>
 
-      <div class="mt-4 p-2 bg-yellow-100 flex justify-center gap-2 text-yellow-700 rounded-lg">
+        <div class="bg-white w-full p-2 mt-2">
+
+         <div class="mt-4 p-2 bg-yellow-100 flex justify-center gap-2 text-yellow-700 rounded-lg">
         <img src="~/assets/images/check.png" width="30" height="30" alt="">
         <i>Thank you, IPV is completed</i>
       </div>
-      
+
       <div class="w-full flex justify-center mt-1">
         <div class="w-70 h-70 rounded-full" >
           <img class="w-70 h-70 rounded-full" :src="src" alt="IPV Image">
         </div>
       </div>
+
+          
+
+          
+
+         
+          
+
+         
+
+
+        </div>
+      </div>
     </div>
-  
-    <div class="w-full p-1"></div>
+   
   </div>
+
+  <TransitionRoot as="template" :show="open">
+    <Dialog class="relative z-10" @close="open = false">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
+        leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
+          <TransitionChild as="template" enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div class="w-full flex justify-end">
+                <button type="button"
+                  class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
+                  @click="open = false" ref="cancelButtonRef">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+
+                </button>
+              </div>
+              <div>
+
+                <div class="mt-3 flex justify-center sm:mt-5">
+                  <img src="~/assets/images/imgrule.jpg" alt="Rules">
+                </div>
+              </div>
+
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
+
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
+import { useRouter, useRoute } from 'vue-router';
+
+
+
+
+
+
+
+
+const open = ref(false)
+
+
 
 const router = useRouter();
 const src = ref('');
-const open = ref(false);
+const deviceHeight = ref(0);
+const topBoxHeight = computed(() => deviceHeight.value * 0.1);
+
+
+const updateHeight = () => {
+  if (typeof window !== 'undefined') {
+    deviceHeight.value = window.innerHeight;
+  }
+};
 
 const goBack = () => {
   router.go(-1); 
 };
-
 onMounted(() => {
+  updateHeight();
+  window.addEventListener('resize', updateHeight);
+
   const ipv = localStorage.getItem('ipv');
   src.value = `https://gkyc.gwcindia.in/kyc-api/uploads/${ipv}.png`;
+
 });
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateHeight);
+  }
+
+});
+
+
+
 </script>
 
-<style>
-/* Add any custom styles here if needed */
+<style scoped>
+/* Keep the same styles as previous solution */
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background-color: rgb(219, 219, 219);
+}
+
+.top-box {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.center-box {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+
+
 </style>

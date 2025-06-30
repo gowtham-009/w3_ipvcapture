@@ -1,94 +1,93 @@
 <template>
-  <div class="w-full h-screen flex flex-col justify-between bg-gray-100 overflow-hidden">
-    <div class="w-full flex-1 overflow-hidden">
-      <div class="w-full flex bg-white">
-        <div class="w-1/6 flex justify-center items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-          </svg>
-        </div>
-        <div class="w-5/6 p-1">
-          <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
-          <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
-        </div>
-        <div class="w-1/6 p-1">
-          <button @click="open = true">
-            <img src="~/assets/images/help.png" alt="Help" width="100" height="100">
-          </button>
-        </div>
+  <div class="container" :style="{ height: deviceHeight + 'px' }">
+    <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
+      <div class="w-1/6 flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+          class="size-5 font-bold">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
       </div>
-
-      <!-- Scrollable content container -->
-      <div class="w-full h-full overflow-y-auto" style="max-height: calc(100vh - 120px);">
-        <div class="w-full p-1 px-2 mt-1 bg-white">
+      <div class="w-5/6 p-1">
+        <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
+        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
+      </div>
+      <div class="w-1/6 p-1">
+        <button @click="open = true">
+          <img src="~/assets/images/help-icon.png" alt="Help" width="100" height="100">
+        </button>
+      </div>
+    </div>
+    <div class="center-box">
+      <div class="scroll-content">
+        <div class="w-full p-1 px-4 mt-1  bg-white">
           <p class="font-bold text-black text-lg">Client Name</p>
           <p class="font-bold text-gray-500 text-sm">UCC: 0000</p>
         </div>
 
-        <div class="w-full flex justify-center items-center bg-white">
-          <div v-if="locationEnabled"
-            class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
-            <p class="text-lg text-gray-500">Your Approx Location</p>
-            <span class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</span>
+        <div class="bg-white w-full p-2 mt-2">
+
+          <div class="w-full flex justify-center items-center bg-white">
+            <div v-if="locationEnabled"
+              class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
+              <p class="text-md text-gray-500">Your Approx Location</p>
+              <span class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</span>
+            </div>
+
+            <div v-if="locationLoading"
+              class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
+              <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
+              <LOADING />
+            </div>
           </div>
 
-          <div v-if="locationLoading"
-            class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
-            <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
-            <LOADING />
-          </div>
-        </div>
-
-
-
-        <div v-if="showLocationAlert"
-          class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
-          <div class="flex items-start">
-            <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
-            <div>
-              <p class="font-bold">Location Access Required</p>
-              <p class="mt-1">We need your location to verify your identity. Please enable location services in your {{
-                device }} settings.</p>
-              <div class="flex gap-2 mt-3">
-                <button @click="requestLocation"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-                  <i class="pi pi-refresh mr-1"></i> Try Again
-                </button>
+          <div v-if="showLocationAlert"
+            class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
+            <div class="flex items-start">
+              <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
+              <div>
+                <p class="font-bold">Location Access Required</p>
+                <p class="mt-1">We need your location to verify your identity. Please enable location services in your
+                  {{
+                    device }} settings.</p>
+                <div class="flex gap-2 mt-3">
+                  <button @click="requestLocation"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="pi pi-refresh mr-1"></i> Try Again
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
-          <div class="w-full bg-yellow-100 rounded-lg px-1 py-2">
-            <p class="text-lg text-gray-500 leading-5">Ensure your nose is positioned at the center of the cross</p>
+          <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
+            <p class="text-center text-gray-500 font-medium">TAKE A SELFIE</p>
+            <div class="w-full bg-yellow-100 rounded-lg px-1 py-2">
+              <p class="text-md text-gray-500 text-center leading-4">Ensure your nose is positioned at the center of the
+                cross</p>
+            </div>
+            <CMAIDENTIFY class="mt-1" ref="cameraComponent" @captured="onImageCaptured" @error="onCameraError"
+              @retake="handleRetake" />
           </div>
-          <CMAIDENTIFY class="mt-1" ref="cameraComponent" @captured="onImageCaptured" @error="onCameraError"
-            @retake="handleRetake" />
-        </div>
 
-        <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg">
-          <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
-        </div>
+          <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg">
+            <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
+          </div>
 
-        <div v-if="loadingprogress" class="max-w-md mx-auto mt-2 px-2 bg-white  shadow-lg rounded-lg">
-         
+          <div v-if="loadingprogress" class="max-w-md mx-auto mt-2 px-2 bg-white  shadow-lg rounded-lg">
+            <p class="text-gray-600  mb-1">
+              {{ syncStatus.message }}
+            </p>
 
-          <p class="text-gray-600  mb-1">
-            {{ syncStatus.message }}
-          </p>
-
-          <div class="w-full bg-gray-400  rounded-full h-6 overflow-hidden relative">
-            <div
-              class="bg-blue-600 h-6 text-white text-sm font-medium text-center flex items-center justify-center transition-all duration-300 ease-in-out"
-              :style="{ width: progress + '%' }">
-              {{ progress.toFixed(2) }}%
+            <div class="w-full bg-gray-400  rounded-full h-6 overflow-hidden relative">
+              <div
+                class="bg-blue-600 h-6 text-white text-sm font-medium text-center flex items-center justify-center transition-all duration-300 ease-in-out"
+                :style="{ width: progress + '%' }">
+                {{ progress.toFixed(2) }}%
+              </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="cameraError" class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
+          <div v-if="cameraError" class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
           <div class="flex items-center">
             <div>
               <p class="font-bold">Camera Error</p>
@@ -96,11 +95,13 @@
             </div>
           </div>
         </div>
+
+
+        </div>
       </div>
     </div>
-
-    <div class="w-full p-1">
-      <button type="button" class="w-full rounded-lg text-white px-2 py-2" :class="{
+    <div class="bottom-box bg-white px-2" :style="{ height: bottomBoxHeight + 'px' }">
+       <button type="button" class="w-full rounded-lg text-white px-2 py-2" :class="{
         'bg-blue-500 hover:bg-blue-600': imageCaptured,
         'bg-gray-400 cursor-not-allowed': !imageCaptured
       }" :disabled="!imageCaptured" @click="handleNext">
@@ -125,19 +126,19 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             <DialogPanel
               class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-             <div class="w-full flex justify-end">
-                  <button type="button"
-                    class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
-                    @click="open = false" ref="cancelButtonRef">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                      stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
+              <div class="w-full flex justify-end">
+                <button type="button"
+                  class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
+                  @click="open = false" ref="cancelButtonRef">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
 
-                  </button>
-                </div>
+                </button>
+              </div>
               <div>
-                
+
                 <div class="mt-3 flex justify-center sm:mt-5">
                   <img src="~/assets/images/imgrule.jpg" alt="Rules">
                 </div>
@@ -151,10 +152,9 @@
   </TransitionRoot>
 </template>
 
-
-
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
+
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 import { useRouter, useRoute } from 'vue-router';
@@ -192,7 +192,21 @@ const loadingprogress = ref(false)
 const device = ref('Desktop')
 
 const route = useRoute()
+
+const deviceHeight = ref(0);
+const topBoxHeight = computed(() => deviceHeight.value * 0.1);
+const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);;
+
+const updateHeight = () => {
+  if (typeof window !== 'undefined') {
+    deviceHeight.value = window.innerHeight;
+  }
+};
+
 onMounted(() => {
+  updateHeight();
+  window.addEventListener('resize', updateHeight);
+
   locationLoading.value = true;
   setupResizeListener();
   checkLocationPermission();
@@ -207,9 +221,10 @@ onMounted(() => {
 
 });
 
-
-
-onUnmounted(() => {
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateHeight);
+  }
   if (locationInterval.value) {
     clearInterval(locationInterval.value);
     locationInterval.value = null;
@@ -442,6 +457,7 @@ const ipvfunction = async () => {
     const data = await uploadResponse.json();
 
     if (data.is_real == true) {
+      
       localStorage.setItem('ipv', data.req_id)
       completeProgress();
       router.push('/thankyoupage')
@@ -459,31 +475,46 @@ const handleNext = () => {
   }
   else {
     alert('Client code exist')
-    //  ipverror.value=true
-    //  ipvlimiterror.value="Client code exist"
+
   }
 };
 
-
-
-
 </script>
-<style>
-/* Add this if you need custom scrollbar styling */
-.scroll-container::-webkit-scrollbar {
-  width: 6px;
+
+<style scoped>
+/* Keep the same styles as previous solution */
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background-color: rgb(219, 219, 219);
 }
 
-.scroll-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.top-box {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
 }
 
-.scroll-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
+.center-box {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9f9f9;
 }
 
-.scroll-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+
+
+.bottom-box {
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-top: 1px solid #ccc; */
+  flex-shrink: 0;
 }
 </style>
