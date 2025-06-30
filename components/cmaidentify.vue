@@ -19,8 +19,8 @@
     </div>
 
     <!-- Status indicators -->
-    <div class="status-indicators mt-1 w-full text-center bg-yellow-100">
-      <div class="">
+    <div class="status-indicators mt-1 w-full text-center flex justify-center gap-2 bg-yellow-100">
+      <div >
         <span class="font-medium">Position: </span>
         <span :class="{
           'text-red-500': !isFaceCentered && !imageCaptured,
@@ -31,27 +31,21 @@
         </span>
       </div>
 
-      <div>
-        <span class="font-medium">Distance: </span>
-        <span :class="{
-          'text-red-500': faceDistanceScore < 70 && !imageCaptured,
-          'text-green-500': faceDistanceScore >= 70 || imageCaptured
-        }">
-          {{ faceDistanceScore.toFixed(0) }}%
-          <span v-if="faceDistanceScore >= 70 || imageCaptured">✅</span>
-          <span v-else>❌ (Need 70%+)</span>
-        </span>
-      </div>
+     <div >
+      <span class="font-medium">Distance: </span>
+      <span :class="{'text-red-500': faceDistanceScore < 70 && !imageCaptured, 'text-green-500': faceDistanceScore >= 70 || imageCaptured}">{{ faceDistanceScore.toFixed(0) }}%</span>
+      <span v-if="faceDistanceScore >= 70 || imageCaptured">✅</span>
+    </div>
     </div>
 
-    <div class="mt-1 w-full text-center p-1 flex justify-center items-center gap-2" v-if="imageCaptured">
-      <p class="text-md font-medium text-gray-500">
+    <div class=" w-full text-center p-1 flex justify-center items-center gap-2" v-if="imageCaptured">
+      <p class="text-sm font-medium text-gray-500">
         Not happy with your selfie?
       </p>
        <button 
       
       @click="retakePhoto"
-      class="mt-1 bg-blue-500 px-1 py-1 text-white rounded-md hover:bg-blue-600 transition-colors"
+      class=" bg-blue-500 px-1 py-1 text-white rounded-md hover:bg-blue-600 transition-colors"
     >
       Retake Photo
     </button>

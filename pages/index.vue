@@ -9,7 +9,7 @@
       </div>
       <div class="w-5/6 p-1">
         <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
-        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
+        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere</p>
       </div>
       <div class="w-1/6 p-1 px-2" >
         <button @click="open = true">
@@ -19,8 +19,8 @@
     </div>
     <div class="center-box">
       <div class="scroll-content">
-        <div class="w-full p-1 px-4 mt-1  bg-white">
-          <p class="font-bold text-black text-lg">{{ clientname }}</p>
+        <div class="w-full p-1 px-4 mt-1 flex justify-between  bg-white">
+          <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
           <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode }}</p>
         </div>
 
@@ -28,9 +28,9 @@
 
           <div class="w-full flex justify-center items-center bg-white">
             <div v-if="locationEnabled"
-              class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
-              <p class="text-md text-gray-500">Your Approx Location</p>
-              <span class="text-gray-500 text-sm">{{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</span>
+              class="w-full flex items-center  justify-center py-1 rounded-lg bg-yellow-100">
+              <p class="text-md text-gray-500">Your GPS Location {{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</p>
+            
             </div>
 
             <div v-if="locationLoading"
@@ -59,10 +59,10 @@
             </div>
           </div>
 
-          <div v-if="locationEnabled" class="w-full mt-3 flex justify-center flex-col">
-            <p class="text-center text-gray-500 font-medium">TAKE A SELFIE</p>
-            <div class="w-full bg-yellow-100 rounded-lg px-1 py-2">
-              <p class="text-md text-gray-500 text-center leading-4">Ensure your nose is positioned at the center of the
+          <div v-if="locationEnabled" class="w-full mt-1 flex justify-center flex-col">
+            <p class="text-center text-black font-medium text-lg">TAKE A SELFIE</p>
+            <div class="w-ful">
+              <p class="text-sm text-gray-500 text-center leading-4">Ensure your nose is positioned at the center of the
                 cross</p>
             </div>
             <CMAIDENTIFY class="mt-1" ref="cameraComponent" @captured="onImageCaptured" @error="onCameraError"
@@ -73,16 +73,14 @@
             <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
           </div>
 
-          <div v-if="loadingprogress" class="max-w-md mx-auto mt-2 px-2 bg-white  shadow-lg rounded-lg">
-            <p class="text-gray-600  mb-1">
-              {{ syncStatus.message }}
-            </p>
+          <div v-if="loadingprogress" class="max-w-md mx-auto mt-3 px-2 bg-white  shadow-lg rounded-lg">
+            
 
-            <div class="w-full bg-gray-400  rounded-full h-6 overflow-hidden relative">
+            <div class="w-full bg-gray-400 bottom-2  rounded-full h-6 overflow-hidden relative" >
               <div
-                class="bg-blue-600 h-6 text-white text-sm font-medium text-center flex items-center justify-center transition-all duration-300 ease-in-out"
+                class="bg-blue-600 h-6  text-white text-sm font-medium text-center flex items-center justify-center transition-all duration-300 ease-in-out"
                 :style="{ width: progress + '%' }">
-                {{ progress.toFixed(2) }}%
+                {{syncStatus.message }}
               </div>
             </div>
           </div>
@@ -196,7 +194,7 @@ const clientcode=ref('')
 const route = useRoute()
 
 const deviceHeight = ref(0);
-const topBoxHeight = computed(() => deviceHeight.value * 0.1);
+const topBoxHeight = computed(() => (deviceHeight.value * 0.1)-20);
 const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);;
 
 const updateHeight = () => {
@@ -392,15 +390,10 @@ const syncStatus = computed(() => {
       title: 'Syncing',
       message: 'Verifying...'
     };
-  } else if (progress.value < 100) {
-    return {
-      title: 'Syncing',
-      message: 'Completing...'
-    };
-  } else {
+  }  else {
     return {
       title: 'Syncing!',
-      message: 'IPV uploaded successfully!'
+      message: 'Completing'
     };
   }
 });

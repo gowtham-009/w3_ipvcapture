@@ -11,7 +11,7 @@
       </div>
       <div class="w-5/6 p-1">
         <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
-        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere, in minutes</p>
+        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere</p>
       </div>
       <div class="w-1/6 p-1 px-2" >
         <button @click="open = true">
@@ -21,8 +21,8 @@
     </div>
     <div class="center-box">
       <div class="scroll-content">
-        <div class="w-full p-1 px-4 mt-1  bg-white">
-          <p class="font-bold text-black text-lg">{{ clientname }}</p>
+        <div class="w-full p-1 px-4 mt-1 flex justify-between  bg-white">
+          <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
           <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode }}</p>
         </div>
         <div class="bg-white w-full p-2 mt-2">
@@ -96,7 +96,7 @@ const clientcode=ref('')
 const router = useRouter();
 const src = ref('');
 const deviceHeight = ref(0);
-const topBoxHeight = computed(() => deviceHeight.value * 0.1);
+const topBoxHeight = computed(() => (deviceHeight.value * 0.1)-20);
 const updateHeight = () => {
   if (typeof window !== 'undefined') {
     deviceHeight.value = window.innerHeight;
