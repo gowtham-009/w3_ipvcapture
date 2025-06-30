@@ -137,7 +137,7 @@ onMounted(() => {
     clientname.value = route.query.clientname;
     clientcode.value = route.query.clientcode;
     
-    // Hide the query parameters from the URL
+  
     if (window.history.replaceState) {
       window.history.replaceState({}, '', window.location.pathname);
     }

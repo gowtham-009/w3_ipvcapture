@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="bottom-box bg-white px-2" :style="{ height: bottomBoxHeight + 'px' }">
-       <button type="button" class="w-full rounded-lg text-white px-2 py-2" :class="{
+       <button type="button" class="w-full rounded-lg text-white px-2 py-3" :class="{
         'bg-blue-500 hover:bg-blue-600': imageCaptured,
         'bg-gray-400 cursor-not-allowed': !imageCaptured
       }" :disabled="!imageCaptured" @click="handleNext">
