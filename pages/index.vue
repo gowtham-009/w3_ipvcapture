@@ -178,7 +178,6 @@ const longitude = ref(null);
 
 const locationInterval = ref(null);
 
-// Camera & Image State
 const imageCaptured = ref(null);
 const cameraError = ref(null);
 
@@ -205,7 +204,6 @@ const updateHeight = () => {
 
 onMounted(() => {
 
- // Store query parameters before hiding them
   if (route.query.clientname && route.query.clientcode) {
     clientname.value = route.query.clientname;
     clientcode.value = route.query.clientcode;
