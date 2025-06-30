@@ -23,8 +23,8 @@
     <div class="center-box">
       <div class="scroll-content">
         <div class="w-full p-1 px-4 mt-1  bg-white">
-          <p class="font-bold text-black text-lg">Client Name</p>
-          <p class="font-bold text-gray-500 text-sm">UCC: 0000</p>
+          <p class="font-bold text-black text-lg">{{ clientname }}</p>
+          <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode }}</p>
         </div>
 
         <div class="bg-white w-full p-2 mt-2">
@@ -109,11 +109,12 @@ import { useRouter, useRoute } from 'vue-router';
 
 
 
-
+const route=useRoute()
 
 
 const open = ref(false)
-
+const clientname=ref('')
+const clientcode=ref('')
 
 
 const router = useRouter();
@@ -132,6 +133,15 @@ const goBack = () => {
   router.go(-1); 
 };
 onMounted(() => {
+   if (route.query.clientname && route.query.clientcode) {
+    clientname.value = route.query.clientname;
+    clientcode.value = route.query.clientcode;
+    
+    // Hide the query parameters from the URL
+    if (window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }
   updateHeight();
   window.addEventListener('resize', updateHeight);
 
