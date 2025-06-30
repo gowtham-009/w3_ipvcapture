@@ -52,7 +52,7 @@
                 <div class="flex gap-2 mt-3">
                   <button @click="requestLocation"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-                    <i class="pi pi-refresh mr-1"></i> Try Again
+                    <i class="pi pi-refresh mr-1"></i> Enable Location
                   </button>
                 </div>
               </div>
