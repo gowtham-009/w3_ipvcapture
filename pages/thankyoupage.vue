@@ -8,7 +8,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         </span>
-       
       </div>
       <div class="w-5/6 p-1">
         <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
@@ -26,9 +25,7 @@
           <p class="font-bold text-black text-lg">{{ clientname }}</p>
           <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode }}</p>
         </div>
-
         <div class="bg-white w-full p-2 mt-2">
-
          <div class="mt-4 p-2 bg-yellow-100 flex justify-center gap-2 text-yellow-700 rounded-lg">
         <img src="~/assets/images/check.png" width="30" height="30" alt="">
         <i>Thank you, IPV is completed</i>
@@ -39,17 +36,6 @@
           <img class="w-70 h-70 rounded-full" :src="src" alt="IPV Image">
         </div>
       </div>
-
-          
-
-          
-
-         
-          
-
-         
-
-
         </div>
       </div>
     </div>
@@ -100,29 +86,17 @@
 
 <script setup>
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
-
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useRouter, useRoute } from 'vue-router';
 
-
-
-
-
 const route=useRoute()
-
-
 const open = ref(false)
 const clientname=ref('')
 const clientcode=ref('')
-
-
 const router = useRouter();
 const src = ref('');
 const deviceHeight = ref(0);
 const topBoxHeight = computed(() => deviceHeight.value * 0.1);
-
-
 const updateHeight = () => {
   if (typeof window !== 'undefined') {
     deviceHeight.value = window.innerHeight;
@@ -132,12 +106,12 @@ const updateHeight = () => {
 const goBack = () => {
   router.go(-1); 
 };
+
 onMounted(() => {
    if (route.query.clientname && route.query.clientcode) {
     clientname.value = route.query.clientname;
     clientcode.value = route.query.clientcode;
     
-  
     if (window.history.replaceState) {
       window.history.replaceState({}, '', window.location.pathname);
     }
@@ -154,7 +128,6 @@ onBeforeUnmount(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', updateHeight);
   }
-
 });
 
 
@@ -162,7 +135,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Keep the same styles as previous solution */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -173,7 +146,6 @@ onBeforeUnmount(() => {
 }
 
 .top-box {
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +158,5 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   background-color: #f9f9f9;
 }
-
-
 
 </style>

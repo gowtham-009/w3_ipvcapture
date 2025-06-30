@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="{ height: deviceHeight + 'px' }">
+  <div class="container !w-full" :style="{ height: deviceHeight + 'px' }">
     <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
       <div class="w-1/6 flex justify-center items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
