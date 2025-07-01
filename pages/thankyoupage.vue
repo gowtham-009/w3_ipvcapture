@@ -175,7 +175,6 @@ onBeforeUnmount(() => {
   background-color: #f9f9f9;
 }
 
-/* For desktop view */
 @media (min-width: 993px) {
   .content-wrapper {
     max-width: 500px;
@@ -188,7 +187,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* For mobile view */
 @media (max-width: 992px) {
   .content-wrapper {
     max-width: 100%;
