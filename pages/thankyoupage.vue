@@ -23,7 +23,7 @@
       <div class="scroll-content">
         <div class="w-full p-1 px-4 mt-1 flex justify-between  bg-white">
           <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
-          <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode }}</p>
+          <p class="font-bold text-gray-500 text-sm">UCC: {{  clientcode.charAt(0).toUpperCase() + clientcode.slice(1) }}</p>
         </div>
         <div class="bg-white w-full p-2 mt-2">
          <div class="mt-4 p-2 bg-yellow-100 flex justify-center gap-2 text-yellow-700 rounded-lg">
