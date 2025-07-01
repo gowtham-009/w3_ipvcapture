@@ -1,5 +1,8 @@
 <template>
-  <div class="container !w-full" :style="{ height: deviceHeight + 'px' }">
+
+   <div class="main-container">
+     <div class="content-wrapper" :style="{ maxWidth: device === 'Desktop' ? '500px' : '100%' }">
+          <div class="container !w-full" :style="{ height: deviceHeight + 'px' }">
     <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
       <div class="w-1/6 flex justify-center items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
@@ -107,6 +110,9 @@
       </button>
     </div>
   </div>
+     </div>
+   </div>
+
 
   <TransitionRoot as="template" :show="open">
     <Dialog class="relative z-10" @close="open = false">
@@ -485,6 +491,21 @@ const handleNext = () => {
 
 <style scoped>
 /* Keep the same styles as previous solution */
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgb(219, 219, 219);
+}
+
+.content-wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Keep your existing styles */
 .container {
   display: flex;
   flex-direction: column;
