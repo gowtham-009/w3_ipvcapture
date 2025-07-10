@@ -36,11 +36,7 @@
             
             </div>
 
-        <p v-if="isIOS" class="text-sm text-gray-500 mt-2">
-  On iPhone, make sure Location is enabled for Safari:
-  <br />
-  <strong>Settings → Safari → Location → “Ask” or “Allow”</strong>
-</p>
+     
 
             <div v-if="locationLoading"
               class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
@@ -49,7 +45,7 @@
             </div>
           </div>
 
-          <div v-if="showLocationAlert"
+          <div v-if="showLocationAlert && !isIOS"
             class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
             <div class="flex items-start">
               <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
@@ -63,17 +59,21 @@
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                     <i class="pi pi-refresh mr-1"></i> Enable Location
                   </button>
-
-                  <p v-if="isIOS" class="text-xs text-gray-500 mt-2">
-                    Safari requires manual permission. After tapping, allow location when asked.
-                    If not prompted, go to:
-                    <br />
-                    Settings → Safari → Location → “Allow”
-                  </p>
                 </div>
               </div>
             </div>
           </div>
+
+          <div v-if="isIOS" class="w-full bg-yellow-100 border-l-4 mt-2 p-4 border-yellow-500 rounded-lg">
+            <p class="text-xs text-yellow-700 ">
+              Safari requires manual permission. After tapping, allow location when asked.
+              If not prompted, go to:
+              <br />
+              Settings → Safari → Location → “Allow”
+            </p>
+          </div>
+
+          
 
           <div v-if="locationEnabled" class="w-full mt-1 flex justify-center flex-col">
             <p class="text-center text-black font-medium text-lg">TAKE A SELFIE</p>
