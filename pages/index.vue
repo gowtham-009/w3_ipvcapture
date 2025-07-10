@@ -36,6 +36,8 @@
             
             </div>
 
+     
+
             <div v-if="locationLoading"
               class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
               <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
@@ -43,7 +45,7 @@
             </div>
           </div>
 
-          <div v-if="showLocationAlert"
+          <div v-if="showLocationAlert && !isIOS"
             class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
             <div class="flex items-start">
               <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
@@ -61,6 +63,23 @@
               </div>
             </div>
           </div>
+
+          <div v-if="isIOS && (!latitude || !longitude)" class="w-full bg-yellow-100 border-l-4 mt-2 p-4 border-yellow-500 rounded-lg text-yellow-700">
+              <p class="font-bold">Location Access Required</p>
+            <p class="mt-1  ">
+              Safari requires manual permission. After tapping, allow location when asked.
+              If not prompted, go to:
+              <br />
+              Settings → Safari → Location → “Allow”
+            </p>
+              <button @click="tryagain()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-1 rounded-lg text-sm">
+                    <i class="pi pi-refresh mr-1"></i> Try Again
+                  </button>
+          
+          </div>
+
+          
 
           <div v-if="locationEnabled" class="w-full mt-1 flex justify-center flex-col">
             <p class="text-center text-black font-medium text-lg">TAKE A SELFIE</p>
@@ -210,27 +229,49 @@ const updateHeight = () => {
 
 onMounted(() => {
 
-  if (route.query.clientname && route.query.clientcode) {
-    clientname.value = route.query.clientname;
-    clientcode.value = route.query.clientcode;
-    
-   
-    if (window.history.replaceState) {
-      window.history.replaceState({}, '', window.location.pathname);
+   if (typeof window !== 'undefined') {
+    const queryName = route.query.clientname;
+    const queryCode = route.query.clientcode;
+
+    if (queryName && queryCode) {
+      clientname.value = queryName;
+      clientcode.value = queryCode;
+
+      localStorage.setItem('clientname', queryName);
+      localStorage.setItem('clientcode', queryCode);
+
+      // Clean URL (remove query parameters)
+      if (window.history.replaceState) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } else {
+      // Load from localStorage fallback
+      clientname.value = localStorage.getItem('clientname') || '';
+      clientcode.value = localStorage.getItem('clientcode') || '';
     }
   }
+
+
   updateHeight();
   window.addEventListener('resize', updateHeight);
 
   locationLoading.value = true;
   setupResizeListener();
   checkLocationPermission();
+locationInterval.value = setInterval(() => {
+  if (!locationEnabled.value) {
+    getLocationWithTimeout(true);
+  }
+}, 5000);
 
-  locationInterval.value = setInterval(() => {
+if (!isIOS.value) {
+  setTimeout(() => {
     if (!locationEnabled.value) {
-      getLocationWithTimeout(true);
+      requestLocation();
     }
-  }, 5000);
+  }, 8000);
+}
+
 
 
 });
@@ -245,6 +286,9 @@ onBeforeUnmount(() => {
   }
 });
 
+const isIOS = computed(() => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+});
 
 // Methods
 function setupResizeListener() {
@@ -263,6 +307,7 @@ function setupResizeListener() {
 const handleRetake = () => {
   imageCaptured.value = false // This will disable the Next button
 }
+
 
 async function checkLocationPermission() {
   try {
@@ -289,6 +334,7 @@ async function checkLocationPermission() {
     handleLocationError(err);
   }
 }
+
 
 function handlePermissionState(state) {
   if (state === 'granted') {
@@ -335,10 +381,25 @@ function handleLocationError(error) {
 }
 
 function requestLocation() {
-  showLocationAlert.value = false;
   locationLoading.value = true;
-  getLocationWithTimeout();
+  showLocationAlert.value = false;
+
+  // This must be called on user gesture for iOS
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      handleLocationSuccess(position);
+    },
+    (err) => {
+      handleLocationError(err);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
 }
+
 
 function onImageCaptured(imageData) {
   imageCaptured.value = imageData;
@@ -469,7 +530,10 @@ const ipvfunction = async () => {
       
       localStorage.setItem('ipv', data.req_id)
       completeProgress();
-      router.push(`/thankyoupage?clientcode=${route.query.clientcode}&clientname=${route.query.clientname}`);
+      
+      router.push(`/thankyoupage`);
+      // localStorage.removeItem('clientname');
+      // localStorage.removeItem('clientcode');
     }
   } catch (error) {
 
@@ -477,9 +541,12 @@ const ipvfunction = async () => {
   }
 };
 
+const tryagain = () => {
+  window.location.reload();
+};
 
 const handleNext = () => {
-  if (route.query.clientname && route.query.clientcode) {
+  if (localStorage.getItem('clientname') && localStorage.getItem('clientcode')) {
     ipvfunction()
   }
   else {
