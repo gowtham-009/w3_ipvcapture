@@ -36,9 +36,10 @@
             
             </div>
 
-            <p class="mt-1">
- 
-  <span v-if="device === 'iOS'">(Settings > Safari > Location > Allow)</span>
+        <p v-if="isIOS" class="text-sm text-gray-500 mt-2">
+  On iPhone, make sure Location is enabled for Safari:
+  <br />
+  <strong>Settings → Safari → Location → “Ask” or “Allow”</strong>
 </p>
 
             <div v-if="locationLoading"
@@ -62,6 +63,13 @@
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                     <i class="pi pi-refresh mr-1"></i> Enable Location
                   </button>
+
+                  <p v-if="isIOS" class="text-xs text-gray-500 mt-2">
+    Safari requires manual permission. After tapping, allow location when asked.
+    If not prompted, go to:
+    <br />
+    Settings → Safari → Location → “Allow”
+  </p>
                 </div>
               </div>
             </div>
@@ -353,12 +361,10 @@ function handleLocationError(error) {
 }
 
 function requestLocation() {
-  // Only use this outside iOS
-  if (isIOS.value) return;
-
-  showLocationAlert.value = false;
   locationLoading.value = true;
+  showLocationAlert.value = false;
 
+  // This must be called on user gesture for iOS
   navigator.geolocation.getCurrentPosition(
     (position) => {
       handleLocationSuccess(position);
@@ -369,10 +375,11 @@ function requestLocation() {
     {
       enableHighAccuracy: true,
       timeout: 10000,
-      maximumAge: 0,
+      maximumAge: 0
     }
   );
 }
+
 
 function onImageCaptured(imageData) {
   imageCaptured.value = imageData;
