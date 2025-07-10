@@ -64,15 +64,16 @@
             </div>
           </div>
 
-          <div v-if="isIOS" class="w-full bg-yellow-100 border-l-4 mt-2 p-4 border-yellow-500 rounded-lg">
-            <p class="text-xs text-yellow-700 ">
+          <div v-if="isIOS && (!latitude || !longitude)" class="w-full bg-yellow-100 border-l-4 mt-2 p-4 border-yellow-500 rounded-lg text-yellow-700">
+              <p class="font-bold">Location Access Required</p>
+            <p class="mt-1  ">
               Safari requires manual permission. After tapping, allow location when asked.
               If not prompted, go to:
               <br />
               Settings → Safari → Location → “Allow”
             </p>
               <button @click="tryagain()"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-1 rounded-lg text-sm">
                     <i class="pi pi-refresh mr-1"></i> Try Again
                   </button>
           
@@ -229,18 +230,23 @@ const updateHeight = () => {
 onMounted(() => {
 
   if (route.query.clientname && route.query.clientcode) {
-    clientname.value = route.query.clientname;
-    clientcode.value = route.query.clientcode;
     
-    localStorage.setItem('clientname', clientname.value);
-    localStorage.setItem('clientcode', clientcode.value);
-  
+
+    localStorage.setItem('clientname', route.query.clientname);
+    localStorage.setItem('clientcode', route.query.clientcode);
+
+   
+   
 
    
     if (window.history.replaceState) {
       window.history.replaceState({}, '', window.location.pathname);
     }
   }
+
+    clientname.value = localStorage.getItem('clientname');
+    clientcode.value = localStorage.getItem('clientcode');
+    
   updateHeight();
   window.addEventListener('resize', updateHeight);
 
@@ -519,7 +525,7 @@ const ipvfunction = async () => {
       
       localStorage.setItem('ipv', data.req_id)
       completeProgress();
-      router.push(`/thankyoupage?clientcode=${route.query.clientcode}&clientname=${route.query.clientname}`);
+      router.push(`/thankyoupage?clientcode=${localStorage.getItem('clientcode')}&clientname=${localStorage.getItem('clientname')}`);
     }
   } catch (error) {
 
@@ -532,7 +538,7 @@ const tryagain = () => {
 };
 
 const handleNext = () => {
-  if (route.query.clientname && route.query.clientcode) {
+  if (localStorage.getItem('clientname') && localStorage.getItem('clientcode')) {
     ipvfunction()
   }
   else {
