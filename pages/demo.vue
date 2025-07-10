@@ -296,6 +296,31 @@ async function checkLocationPermission() {
     handleLocationError(err);
   }
 }
+async function checkLocationPermission() {
+  try {
+    locationLoading.value = true;
+    showLocationAlert.value = false;
+
+    if (!navigator.geolocation) {
+      throw new Error('Geolocation not supported');
+    }
+
+    // Modern permission API check
+    if (navigator.permissions) {
+      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+      handlePermissionState(permissionStatus.state);
+
+      permissionStatus.onchange = () => {
+        handlePermissionState(permissionStatus.state);
+      };
+    } else {
+      // Fallback for older browsers
+      getLocationWithTimeout();
+    }
+  } catch (err) {
+    handleLocationError(err);
+  }
+}
 
 
 function handlePermissionState(state) {
