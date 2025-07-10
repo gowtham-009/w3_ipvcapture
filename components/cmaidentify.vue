@@ -10,8 +10,15 @@
         <LOADING/>
       </div>
       
-      <video ref="video" autoplay playsinline v-show="cameraReady && !imageCaptured && cameraActive" class="camera-video" />
-      <img v-if="imageCaptured" :src="capturedImage" alt="Captured Face" class="camera-image" />
+<video 
+  ref="video" 
+  autoplay 
+  playsinline 
+  muted 
+  v-show="cameraReady && !imageCaptured && cameraActive" 
+  class="camera-video"
+/>     
+ <img v-if="imageCaptured" :src="capturedImage" alt="Captured Face" class="camera-image" />
       <canvas ref="canvas" class="hidden"></canvas>
 
       <!-- Visual guides -->

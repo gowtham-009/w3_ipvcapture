@@ -190,18 +190,18 @@ const options = new faceapi.TinyFaceDetectorOptions({
   const scaleX = video.value.videoWidth / videoRect.width
   const scaleY = video.value.videoHeight / videoRect.height
 
-  const nosePosition = {
-    x: nose.x / scaleX,
-    y: nose.y / scaleY
-  }
+ const nosePosition = { x: nose.x, y: nose.y }
 
   // Calculate distance from center
-  const center = { x: FRAME_SIZE / 2, y: FRAME_SIZE / 2 }
-  const distToCenter = distance(nosePosition, center)
+const center = {
+  x: video.value.videoWidth / 2,
+  y: video.value.videoHeight / 2
+}
+  const distToCenter = Math.hypot(nosePosition.x - center.x, nosePosition.y - center.y)
 
   // Calculate score (100% when perfectly centered)
-  const maxDistance = FRAME_SIZE / 2
-  faceDistanceScore.value = Math.max(0, 100 - (distToCenter / maxDistance) * 100)
+ const maxDistance = Math.min(center.x, center.y) // Radius of video
+faceDistanceScore.value = Math.max(0, 100 - (distToCenter / maxDistance) * 100)
 
   // Check if face is centered enough
   isFaceCentered.value = distToCenter <= CENTER_TOLERANCE
