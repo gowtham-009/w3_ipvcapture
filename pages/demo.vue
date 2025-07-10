@@ -1,384 +1,563 @@
-
 <template>
-  <div class="flex flex-col justify-center items-center">
-    <div class="camera-wrapper" :class="{
-      'border-blue-400': !readyToCapture && !imageCaptured,
-      'border-green-500': readyToCapture || imageCaptured,
-    }">
-      <!-- Loading text shown when camera is not active -->
-      <div v-if="!cameraReady" class="absolute inset-0 flex items-center justify-center text-gray-500">
-        <LOADING/>
-      </div>
-      
-<video 
-  ref="video" 
-  autoplay 
-  playsinline 
-  muted 
-  v-show="cameraReady && !imageCaptured && cameraActive" 
-  class="camera-video"
-/>      <img v-if="imageCaptured" :src="capturedImage" alt="Captured Face" class="camera-image" />
-      <canvas ref="canvas" class="hidden"></canvas>
 
-      <!-- Visual guides -->
-      <div class="center-guide" v-if="!imageCaptured && cameraReady">
-        <div class="crosshair"></div>
-        <div class="distance-ring" :class="{ 'ring-green': readyToCapture }"></div>
-        <!-- Axis lines -->
-        <div class="axis-line x-axis"></div>
-        <div class="axis-line y-axis"></div>
+   <div class="main-container">
+     <div class="content-wrapper" :style="{ maxWidth: device === 'Desktop' ? '500px' : '100%' }">
+          <div class="container !w-full" :style="{ height: deviceHeight + 'px' }">
+    <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
+      <div class="w-1/6 flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+          class="size-5 font-bold">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+      </div>
+      <div class="w-5/6 p-1">
+        <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
+        <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere</p>
+      </div>
+      <div class="w-1/6 p-1 px-2" >
+        <button @click="open = true">
+          <img src="~/assets/images/help-icon.png" alt="Help" width="100" height="100">
+        </button>
       </div>
     </div>
+    <div class="center-box">
+      <div class="scroll-content">
+        <div class="w-full p-1 px-4 mt-1 flex justify-between  bg-white">
+          <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
+          <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode.charAt(0).toUpperCase() + clientcode.slice(1) }}</p>
+        </div>
 
-    <!-- Status indicators -->
-    <div class="status-indicators mt-1 w-full text-center flex justify-center gap-2 bg-yellow-100" v-if="cameraReady">
-      <div>
-        <span class="font-medium">Position: </span>
-        <span :class="{
-          'text-red-500': !isFaceCentered && !imageCaptured,
-          'text-yellow-500': isFaceCentered && faceDistanceScore < 70 && !imageCaptured,
-          'text-green-500': readyToCapture || imageCaptured
-        }">
-          {{ facePositionStatus }}
-        </span>
-      </div>
+        <div class="bg-white w-full p-2 mt-2">
 
-      <div>
-        <span class="font-medium">Distance: </span>
-        <span :class="{'text-red-500': faceDistanceScore < 70 && !imageCaptured, 'text-green-500': faceDistanceScore >= 70 || imageCaptured}">
-          {{ faceDistanceScore.toFixed(0) }}%
-        </span>
-        <span v-if="faceDistanceScore >= 70 || imageCaptured">✅</span>
+          <div class="w-full flex justify-center items-center bg-white">
+            <div v-if="locationEnabled"
+              class="w-full flex items-center  justify-center py-1 rounded-lg bg-yellow-100">
+              <p class="text-md text-gray-500">Your GPS Location {{ latitude.toFixed(4) }} - {{ longitude.toFixed(4) }}</p>
+            
+            </div>
+
+            <p class="mt-1">
+ 
+  <span v-if="device === 'iOS'">(Settings > Safari > Location > Allow)</span>
+</p>
+
+            <div v-if="locationLoading"
+              class="w-full flex items-center flex-col justify-center py-1 rounded-lg bg-yellow-100">
+              <p class="text-lg text-gray-500 mb-2">Accessing GPS Location</p>
+              <LOADING />
+            </div>
+          </div>
+
+          <div v-if="showLocationAlert"
+            class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
+            <div class="flex items-start">
+              <i class="pi pi-exclamation-triangle text-xl mr-3 mt-0.5"></i>
+              <div>
+                <p class="font-bold">Location Access Required</p>
+                <p class="mt-1">We need your location to verify your identity. Please enable location services in your
+                  {{
+                    device }} settings.</p>
+                <div class="flex gap-2 mt-3">
+                  <button @click="requestLocation"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="pi pi-refresh mr-1"></i> Enable Location
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="locationEnabled" class="w-full mt-1 flex justify-center flex-col">
+            <p class="text-center text-black font-medium text-lg">TAKE A SELFIE</p>
+            <div class="w-ful">
+              <p class="text-sm text-gray-500 text-center leading-4">Ensure your nose is positioned at the center of the
+                cross</p>
+            </div>
+            <CMAIDENTIFY class="mt-1" ref="cameraComponent" @captured="onImageCaptured" @error="onCameraError"
+              @retake="handleRetake" />
+          </div>
+
+          <div v-if="ipverror" class="w-100 p-1 bg-red-100 mt-2 px-2 rounded-lg">
+            <p class="text-sm text-red-500 text-center leading-5">{{ ipvlimiterror }}</p>
+          </div>
+
+          <div v-if="loadingprogress" class="max-w-md mx-auto mt-3 px-2 bg-white  shadow-lg rounded-lg">
+            
+
+            <div class="w-full bg-gray-400 bottom-2  rounded-full h-6 overflow-hidden relative" >
+              <div
+                class="bg-blue-600 h-6  text-white text-sm font-medium text-center flex items-center justify-center transition-all duration-300 ease-in-out"
+                :style="{ width: progress + '%' }">
+                {{syncStatus.message }}
+              </div>
+            </div>
+          </div>
+
+          <div v-if="cameraError" class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
+          <div class="flex items-center">
+            <div>
+              <p class="font-bold">Camera Error</p>
+              <p>{{ cameraError }}</p>
+            </div>
+          </div>
+        </div>
+
+
+        </div>
       </div>
     </div>
-
-    <div class="w-full text-center p-1 flex justify-center items-center gap-2" v-if="imageCaptured">
-      <p class="text-sm font-medium text-gray-500">
-        Not happy with your selfie?
-      </p>
-      <button 
-        @click="retakePhoto"
-        class="bg-blue-500 px-1 py-1 text-white rounded-md hover:bg-blue-600 transition-colors"
-      >
-        Retake Photo
+    <div class="bottom-box bg-white px-2" :style="{ height: bottomBoxHeight + 'px' }">
+       <button type="button" class="w-full rounded-lg text-white px-2 py-3" :class="{
+        'bg-blue-500 hover:bg-blue-600': imageCaptured,
+        'bg-gray-400 cursor-not-allowed': !imageCaptured
+      }" :disabled="!imageCaptured" @click="handleNext">
+        {{ buttonText }}
       </button>
     </div>
   </div>
+     </div>
+   </div>
+
+
+  <TransitionRoot as="template" :show="open">
+    <Dialog class="relative z-10" @close="open = false">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
+        leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
+          <TransitionChild as="template" enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div class="w-full flex justify-end">
+                <button type="button"
+                  class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
+                  @click="open = false" ref="cancelButtonRef">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+
+                </button>
+              </div>
+              <div>
+
+                <div class="mt-3 flex justify-center sm:mt-5">
+                  <img src="~/assets/images/imgrule.jpg" alt="Rules">
+                </div>
+              </div>
+
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import * as faceapi from 'face-api.js'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
+
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
+import { useRouter, useRoute } from 'vue-router';
+import CMAIDENTIFY from '~/components/cmaidentify.vue';
 import LOADING from '~/components/googleloading.vue';
-const emit = defineEmits(['captured'])
 
-const video = ref(null)
-const canvas = ref(null)
-const capturedImage = ref(null)
-const imageCaptured = ref(false)
-const cameraActive = ref(true)
-const cameraReady = ref(false) 
-const faceDistanceScore = ref(0)
-const isFaceCentered = ref(false)
-const faceDetected = ref(false)
-const multipleFacesDetected = ref(false)
 
-let mediaStream = null
-let alertShown = false
+const cameraComponent = ref(null);
 
-// Frame settings
-const FRAME_SIZE = 300
-const CENTER_TOLERANCE = 20
-const MIN_DISTANCE_SCORE = 70
 
-const retakePhoto = () => {
-  capturedImage.value = null
-  imageCaptured.value = false
-  faceDistanceScore.value = 0
-  isFaceCentered.value = false
-  faceDetected.value = false
-  
-  // Emit event to parent
-  emit('retake')
-  
-  stopCamera()
-  startCamera()
-}
+const buttonText = ref("SAVE & PROCEED");
 
-const startCamera = async () => {
-  try {
-    cameraActive.value = true
-    cameraReady.value = false // Show loading text initially
-    
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width: FRAME_SIZE,
-        height: FRAME_SIZE,
-        facingMode: 'user'
-      }
-    })
-    
-    video.value.srcObject = mediaStream
-    
-    // Wait for video to be ready to play
-  video.value.onloadedmetadata = async () => {
-  cameraReady.value = true;
+const open = ref(false)
 
-  try {
-    await video.value.play(); // Explicit call to play for iOS
-  } catch (e) {
-    console.warn('iOS autoplay workaround: forcing play on user gesture.');
+const ipverror = ref(false)
+const ipvlimiterror = ref('')
+
+const locationEnabled = ref(false);
+const locationLoading = ref(true);
+const showLocationAlert = ref(false);
+const latitude = ref(null);
+const longitude = ref(null);
+
+const locationInterval = ref(null);
+
+const imageCaptured = ref(null);
+const cameraError = ref(null);
+
+const loadingprogress = ref(false)
+
+
+
+
+const device = ref('Desktop')
+const clientname=ref('')
+const clientcode=ref('')
+
+const route = useRoute()
+
+const deviceHeight = ref(0);
+const topBoxHeight = computed(() => (deviceHeight.value * 0.1)-20);
+const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);;
+
+const updateHeight = () => {
+  if (typeof window !== 'undefined') {
+    deviceHeight.value = window.innerHeight;
   }
-
-  startDetectionLoop();
 };
+
+onMounted(() => {
+
+  if (route.query.clientname && route.query.clientcode) {
+    clientname.value = route.query.clientname;
+    clientcode.value = route.query.clientcode;
     
-  } catch (err) {
-    emit('error', { message: 'Could not access camera: ' + err.message })
-    cameraReady.value = false
-  }
-}
-const loadModels = async () => {
-  await faceapi.nets.tinyFaceDetector.loadFromUri('/models/tiny_face_detector')
-  await faceapi.nets.faceLandmark68Net.loadFromUri('/models/face_landmark_68')
-}
-
-const distance = (p1, p2) => Math.hypot(p1.x - p2.x, p1.y - p2.y)
-
-const detectFaces = async () => {
-  if (!video.value || video.value.readyState !== 4 || imageCaptured.value) return
-const options = new faceapi.TinyFaceDetectorOptions({
-    inputSize: 160,  // Reduce from default 416
-    scoreThreshold: 0.5
-  });
-  const detections = await faceapi
-    .detectAllFaces(video.value, options)
-    .withFaceLandmarks();
-
-  // Handle multiple faces
-  if (detections.length > 1) {
-    faceDetected.value = false
-    isFaceCentered.value = false
-    faceDistanceScore.value = 0
-    multipleFacesDetected.value = true
-
-    if (!alertShown) {
-      alert('❌ Multiple faces detected. Please ensure only one face is visible.')
-      alertShown = true
-      setTimeout(() => { alertShown = false }, 3000)
+   
+    if (window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
     }
+  }
+  updateHeight();
+  window.addEventListener('resize', updateHeight);
+
+  locationLoading.value = true;
+  setupResizeListener();
+  checkLocationPermission();
+locationInterval.value = setInterval(() => {
+  if (!locationEnabled.value) {
+    getLocationWithTimeout(true);
+  }
+}, 5000);
+
+setTimeout(() => {
+  if (!locationEnabled.value) {
+    requestLocation();
+  }
+}, 8000); // Retry only once if initial fails
+
+
+
+});
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateHeight);
+  }
+  if (locationInterval.value) {
+    clearInterval(locationInterval.value);
+    locationInterval.value = null;
+  }
+});
+
+const isIOS = computed(() => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+});
+
+// Methods
+function setupResizeListener() {
+  const updateDeviceInfo = () => {
+
+    device.value = window.innerWidth <= 992 ? 'Mobile' : 'Desktop';
+  };
+
+  // Set initial values
+  updateDeviceInfo();
+
+  // Add resize listener
+  window.addEventListener('resize', updateDeviceInfo);
+}
+
+const handleRetake = () => {
+  imageCaptured.value = false // This will disable the Next button
+}
+
+async function checkLocationPermission() {
+  try {
+    locationLoading.value = true;
+    showLocationAlert.value = false;
+
+    if (!navigator.geolocation) {
+      throw new Error('Geolocation not supported');
+    }
+
+    // Use a fallback approach on iOS
+    getLocationWithTimeout();
+
+  } catch (err) {
+    handleLocationError(err);
+  }
+}
+
+
+function handlePermissionState(state) {
+  if (state === 'granted') {
+    getLocationWithTimeout();
+  } else if (state === 'prompt') {
+    getLocationWithTimeout();
+  } else {
+    locationLoading.value = false;
+    showLocationAlert.value = true;
+  }
+}
+
+function getLocationWithTimeout(isRepeated = false) {
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      handleLocationSuccess(position);
+      if (isRepeated && locationInterval.value) {
+        clearInterval(locationInterval.value); // ✅ Stop interval after successful location fetch
+        locationInterval.value = null;
+      }
+    },
+    (err) => {
+      handleLocationError(err);
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+
+function handleLocationSuccess(position) {
+  latitude.value = position.coords.latitude;
+  longitude.value = position.coords.longitude;
+  locationEnabled.value = true;
+  locationLoading.value = false;
+  showLocationAlert.value = false;
+}
+
+function handleLocationError(error) {
+  console.error('Location error:', error);
+  locationLoading.value = true;
+  showLocationAlert.value = true;
+  locationEnabled.value = false;
+}
+
+function requestLocation() {
+  showLocationAlert.value = false;
+  locationLoading.value = true;
+
+  // Must be triggered by a button click on iOS
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      handleLocationSuccess(position);
+    },
+    (err) => {
+      handleLocationError(err);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+}
+
+function onImageCaptured(imageData) {
+  imageCaptured.value = imageData;
+  cameraError.value = null;
+}
+
+function onCameraError(error) {
+  cameraError.value = error.message || 'Failed to access camera';
+}
+
+const getCountry = async () => {
+  if (!latitude.value || !longitude.value) {
+    console.error('Latitude or longitude is missing')
     return
   }
 
-  multipleFacesDetected.value = false
+  const apiKey = 'R2ey6sqmfP210eJgVXX-NvmoUgrKlDAW4JwVXgVEaHs'
+  const apiUrl = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude.value},${longitude.value}&lang=en-US&apiKey=${apiKey}`
 
-  // No face detected
-  if (detections.length === 0) {
-    faceDetected.value = false
-    isFaceCentered.value = false
-    faceDistanceScore.value = 0
+  try {
+    const response = await fetch(apiUrl)
+    if (!response.ok) {
+      throw new Error(`Network error: ${response.status}`)
+    }
+    const data = await response.json()
+    if (data) {
+      const geolocation = {
+        latitute: data.items[0].position.lat,
+        longitude: data.items[0].position.lng,
+        conuntryname: data.items[0].address.countryName,
+        countrycode: data.items[0].address.countryCode,
+      }
+      return geolocation
+    }
+
+  } catch (error) {
+    console.error('Error fetching location:', error.message)
+  }
+}
+
+
+
+const progress = ref(0);
+const progressInterval = ref(null);
+const syncStatus = computed(() => {
+  if (progress.value <= 30) {
+    return {
+      title: 'Syncing',
+      message: 'Saving...'
+    };
+  } else if (progress.value <= 80) {
+    return {
+      title: 'Syncing',
+      message: 'Verifying...'
+    };
+  }  else {
+    return {
+      title: 'Syncing!',
+      message: 'Completing'
+    };
+  }
+});
+
+const startProgressAnimation = () => {
+  progress.value = 0;
+  // Smooth progress animation
+  progressInterval.value = setInterval(() => {
+    if (progress.value < 90) { // Only animate to 90%, rest will complete on API success
+      progress.value += Math.random() * 10;
+      if (progress.value > 90) progress.value = 90;
+    }
+  }, 300);
+};
+
+const completeProgress = () => {
+  clearInterval(progressInterval.value);
+  progress.value = 100;
+  setTimeout(() => {
+    loadingprogress.value = false;
+  }, 500);
+};
+
+
+
+const router = useRouter()
+
+
+
+
+const ipvfunction = async () => {
+  ipverror.value = false
+  if (!imageCaptured.value) {
+    ipverror.value = true
+    ipvlimiterror.value = "Ipv image invalid"
     return
   }
+  loadingprogress.value = true
+  startProgressAnimation();
 
-  faceDetected.value = true
-  const detection = detections[0]
-  const landmarks = detection.landmarks
-  const nose = landmarks.getNose()[3]
 
-  // Calculate position
-  const videoRect = video.value.getBoundingClientRect()
-  const scaleX = video.value.videoWidth / videoRect.width
-  const scaleY = video.value.videoHeight / videoRect.height
+  const apiurl = "https://gkyc.gwcindia.in/kyc-api/face-liveness.php";
 
- const nosePosition = { x: nose.x, y: nose.y }
 
-  // Calculate distance from center
-const center = {
-  x: video.value.videoWidth / 2,
-  y: video.value.videoHeight / 2
-}
-  const distToCenter = Math.hypot(nosePosition.x - center.x, nosePosition.y - center.y)
+  try {
 
-  // Calculate score (100% when perfectly centered)
- const maxDistance = Math.min(center.x, center.y) // Radius of video
-faceDistanceScore.value = Math.max(0, 100 - (distToCenter / maxDistance) * 100)
+    const formData = new FormData();
 
-  // Check if face is centered enough
-  isFaceCentered.value = distToCenter <= CENTER_TOLERANCE
 
-  // Auto-capture when conditions are met
-  if (readyToCapture.value && !imageCaptured.value) {
-    captureImage()
+    const base64Data = imageCaptured.value.split(',')[1] || imageCaptured.value;
+    formData.append('fileData', base64Data);
+
+
+
+    const uploadResponse = await fetch(apiurl, {
+      method: 'POST',
+
+      body: formData,
+    });
+
+
+    if (!uploadResponse.ok) {
+      throw new Error(`Network error: ${uploadResponse.status}`);
+    }
+
+    const data = await uploadResponse.json();
+
+    if (data.is_real == true) {
+      
+      localStorage.setItem('ipv', data.req_id)
+      completeProgress();
+      router.push(`/thankyoupage?clientcode=${route.query.clientcode}&clientname=${route.query.clientname}`);
+    }
+  } catch (error) {
+
+    console.error('IPv Upload Failed:', error.message);
   }
-}
+};
 
-const captureImage = () => {
-  const ctx = canvas.value.getContext('2d')
-  canvas.value.width = video.value.videoWidth
-  canvas.value.height = video.value.videoHeight
-  ctx.drawImage(video.value, 0, 0, canvas.value.width, canvas.value.height)
-  capturedImage.value = canvas.value.toDataURL('image/png')
-  emit('captured', capturedImage.value)
-  imageCaptured.value = true
-  stopCamera()
-}
 
-const stopCamera = () => {
-  if (mediaStream) {
-    mediaStream.getTracks().forEach(track => track.stop())
-    cameraActive.value = false
+const handleNext = () => {
+  if (route.query.clientname && route.query.clientcode) {
+    ipvfunction()
   }
-}
-
-const startDetectionLoop = () => {
-  const loop = async () => {
-    await detectFaces()
-    requestAnimationFrame(loop)
+  else {
+    alert('Client code exist')
   }
-  loop()
-}
+};
 
-// Computed properties
-const readyToCapture = computed(() => {
-  return faceDetected.value &&
-    isFaceCentered.value &&
-    faceDistanceScore.value >= MIN_DISTANCE_SCORE
-})
-
-const facePositionStatus = computed(() => {
-  if (imageCaptured.value) return 'Captured!'
-  if (!faceDetected.value) return 'No face'
-  if (!isFaceCentered.value) return 'Off center'
-  if (faceDistanceScore.value < MIN_DISTANCE_SCORE) return 'Too far'
-  return 'Perfect!'
-})
-
-onMounted(async () => {
-  await loadModels()
-  startCamera()
-})
 </script>
 
 <style scoped>
-.camera-wrapper {
+/* Keep the same styles as previous solution */
+
+.main-container {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 300px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 4px solid;
+  min-height: 100vh;
+  background-color: rgb(219, 219, 219);
+}
+
+.content-wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Keep your existing styles */
+.container {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
-  background-color: black; /* Prevent transparency flicker on iOS */
-}
-.camera-wrapper.border-blue-400 {
-  border-color: #60a5fa;
-}
-
-.camera-wrapper.border-green-500 {
-  border-color: #10b981;
-}
-
-.camera-video,
-.camera-image {
+  overflow: hidden;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  inset: 0;
+  background-color: rgb(219, 219, 219);
 }
 
-.center-guide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.top-box {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
 }
 
-.crosshair {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  z-index: 2;
+.center-box {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9f9f9;
 }
 
-.crosshair:before,
-.crosshair:after {
-  content: '';
-  position: absolute;
-  background: rgba(255, 255, 255, 0.8);
-}
 
-.crosshair:before {
-  width: 2px;
-  height: 20px;
-  left: 9px;
-  top: 0;
-}
 
-.crosshair:after {
-  width: 20px;
-  height: 2px;
-  left: 0;
-  top: 9px;
-}
-
-.distance-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
-  border: 2px dashed rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
-  transition: border-color 0.3s ease;
-  z-index: 1;
-}
-
-.distance-ring.ring-green {
-  border-color: rgba(0, 255, 0, 0.7);
-}
-
-/* Axis lines */
-.axis-line {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-}
-
-.x-axis {
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  transform: translateY(-50%);
-}
-
-.y-axis {
-  left: 50%;
-  top: 0;
-  height: 100%;
-  width: 1px;
-  transform: translateX(-50%);
-}
-
-.status-indicators {
-  min-width: 250px;
- 
-  padding: 1%;
-  border-radius: 8px;
-}
-
-.instructions p {
-  margin: 0.3rem 0;
-  padding: 0.2rem;
-  border-radius: 4px;
+.bottom-box {
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-top: 1px solid #ccc; */
+  flex-shrink: 0;
 }
 </style>
