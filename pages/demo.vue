@@ -229,24 +229,29 @@ const updateHeight = () => {
 
 onMounted(() => {
 
-  if (route.query.clientname && route.query.clientcode) {
-    
+  if (typeof window !== 'undefined') {
+    const queryName = route.query.clientname;
+    const queryCode = route.query.clientcode;
 
-    localStorage.setItem('clientname', route.query.clientname);
-    localStorage.setItem('clientcode', route.query.clientcode);
+    if (queryName && queryCode) {
+      clientname.value = queryName;
+      clientcode.value = queryCode;
 
-   
-   
+      localStorage.setItem('clientname', queryName);
+      localStorage.setItem('clientcode', queryCode);
 
-   
-    if (window.history.replaceState) {
-      window.history.replaceState({}, '', window.location.pathname);
+      // Clean URL (remove query parameters)
+      if (window.history.replaceState) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } else {
+      // Load from localStorage fallback
+      clientname.value = localStorage.getItem('clientname') || '';
+      clientcode.value = localStorage.getItem('clientcode') || '';
     }
   }
 
-    clientname.value = localStorage.getItem('clientname');
-    clientcode.value = localStorage.getItem('clientcode');
-    
+
   updateHeight();
   window.addEventListener('resize', updateHeight);
 
@@ -525,7 +530,10 @@ const ipvfunction = async () => {
       
       localStorage.setItem('ipv', data.req_id)
       completeProgress();
+      
       router.push(`/thankyoupage?clientcode=${localStorage.getItem('clientcode')}&clientname=${localStorage.getItem('clientname')}`);
+      localStorage.removeItem('clientname');
+      localStorage.removeItem('clientcode');
     }
   } catch (error) {
 
