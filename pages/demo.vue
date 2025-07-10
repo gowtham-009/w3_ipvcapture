@@ -65,11 +65,11 @@
                   </button>
 
                   <p v-if="isIOS" class="text-xs text-gray-500 mt-2">
-    Safari requires manual permission. After tapping, allow location when asked.
-    If not prompted, go to:
-    <br />
-    Settings → Safari → Location → “Allow”
-  </p>
+                    Safari requires manual permission. After tapping, allow location when asked.
+                    If not prompted, go to:
+                    <br />
+                    Settings → Safari → Location → “Allow”
+                  </p>
                 </div>
               </div>
             </div>
