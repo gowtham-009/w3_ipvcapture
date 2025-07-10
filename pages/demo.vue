@@ -341,34 +341,24 @@ function handleLocationError(error) {
 }
 
 function requestLocation() {
-  // Must be triggered directly from button click to work on iOS
   showLocationAlert.value = false;
   locationLoading.value = true;
-
-  // Use direct sync call
-  setTimeout(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
-        locationEnabled.value = true;
-        locationLoading.value = false;
-      },
-      (error) => {
-        locationEnabled.value = false;
-        locationLoading.value = false;
-        showLocationAlert.value = true;
-        console.error('Location error (iOS):', error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  }, 0); 
+ getLocationWithTimeout();
+  // Must be triggered by a button click on iOS
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      handleLocationSuccess(position);
+    },
+    (err) => {
+      handleLocationError(err);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
 }
-
 
 function onImageCaptured(imageData) {
   imageCaptured.value = imageData;
