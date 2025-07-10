@@ -229,7 +229,7 @@ const updateHeight = () => {
 
 onMounted(() => {
 
-  if (typeof window !== 'undefined') {
+   if (typeof window !== 'undefined') {
     const queryName = route.query.clientname;
     const queryCode = route.query.clientcode;
 
@@ -531,9 +531,9 @@ const ipvfunction = async () => {
       localStorage.setItem('ipv', data.req_id)
       completeProgress();
       
-      router.push(`/thankyoupage?clientcode=${localStorage.getItem('clientcode')}&clientname=${localStorage.getItem('clientname')}`);
-      localStorage.removeItem('clientname');
-      localStorage.removeItem('clientcode');
+      router.push(`/thankyoupage`);
+      // localStorage.removeItem('clientname');
+      // localStorage.removeItem('clientcode');
     }
   } catch (error) {
 

@@ -113,14 +113,8 @@ const goBack = () => {
 };
 
 onMounted(() => {
-  if (route.query.clientname && route.query.clientcode) {
-    clientname.value = route.query.clientname;
-    clientcode.value = route.query.clientcode;
-    
-    if (window.history.replaceState) {
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }
+  clientname.value = localStorage.getItem('clientname') 
+  clientcode.value = localStorage.getItem('clientcode')
   
   updateHeight();
   window.addEventListener('resize', updateHeight);
