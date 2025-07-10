@@ -236,11 +236,13 @@ locationInterval.value = setInterval(() => {
   }
 }, 5000);
 
-setTimeout(() => {
-  if (!locationEnabled.value) {
-    requestLocation();
-  }
-}, 8000); // Retry only once if initial fails
+if (!isIOS.value) {
+  setTimeout(() => {
+    if (!locationEnabled.value) {
+      requestLocation();
+    }
+  }, 8000);
+}
 
 
 
@@ -341,10 +343,12 @@ function handleLocationError(error) {
 }
 
 function requestLocation() {
+  // Only use this outside iOS
+  if (isIOS.value) return;
+
   showLocationAlert.value = false;
   locationLoading.value = true;
- getLocationWithTimeout();
-  // Must be triggered by a button click on iOS
+
   navigator.geolocation.getCurrentPosition(
     (position) => {
       handleLocationSuccess(position);
@@ -355,7 +359,7 @@ function requestLocation() {
     {
       enableHighAccuracy: true,
       timeout: 10000,
-      maximumAge: 0
+      maximumAge: 0,
     }
   );
 }
