@@ -71,6 +71,11 @@
               <br />
               Settings → Safari → Location → “Allow”
             </p>
+              <button @click="tryagain()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="pi pi-refresh mr-1"></i> Try Again
+                  </button>
+          
           </div>
 
           
@@ -227,6 +232,10 @@ onMounted(() => {
     clientname.value = route.query.clientname;
     clientcode.value = route.query.clientcode;
     
+    localStorage.setItem('clientname', clientname.value);
+    localStorage.setItem('clientcode', clientcode.value);
+  
+
    
     if (window.history.replaceState) {
       window.history.replaceState({}, '', window.location.pathname);
@@ -518,6 +527,9 @@ const ipvfunction = async () => {
   }
 };
 
+const tryagain = () => {
+  window.location.reload();
+};
 
 const handleNext = () => {
   if (route.query.clientname && route.query.clientcode) {
