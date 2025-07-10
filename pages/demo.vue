@@ -280,22 +280,7 @@ const handleRetake = () => {
   imageCaptured.value = false // This will disable the Next button
 }
 
-async function checkLocationPermission() {
-  try {
-    locationLoading.value = true;
-    showLocationAlert.value = false;
 
-    if (!navigator.geolocation) {
-      throw new Error('Geolocation not supported');
-    }
-
-    // Use a fallback approach on iOS
-    getLocationWithTimeout();
-
-  } catch (err) {
-    handleLocationError(err);
-  }
-}
 async function checkLocationPermission() {
   try {
     locationLoading.value = true;
