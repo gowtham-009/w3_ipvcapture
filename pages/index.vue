@@ -258,6 +258,7 @@ onMounted(() => {
   locationLoading.value = true;
   setupResizeListener();
   checkLocationPermission();
+  
 locationInterval.value = setInterval(() => {
   if (!locationEnabled.value) {
     getLocationWithTimeout(true);
