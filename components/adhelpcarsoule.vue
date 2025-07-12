@@ -61,7 +61,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateHeight)
 })
-const carsoule = computed(() => deviceHeight.value *0.8)
+const carsoule = computed(() => deviceHeight.value *0.7)
 const slides = ref([
   { id: 1, content: 'Welcome to Slide One' },
   { id: 2, content: '🌟 Slide Two has stars!' },

@@ -76,10 +76,10 @@ const handleNext = () => {
 
       <!-- Center Box -->
       <div class="center-box" :style="{ height: centerBoxHeight + 'px' }">
-        <div v-if="isIOS" class="box1 h-full flex items-center justify-center">
+        <div v-if="isIOS" class="box1 px-8 pt-2">
           <iosHELPCARSOULE class="w-full " />
         </div>
-        <div v-else class="box2 px-10 pt-2" >
+        <div v-else class="box2 px-8 pt-2" >
           <adHELPCARSOULE class="w-full " />
         </div>
       </div>
