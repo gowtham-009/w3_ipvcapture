@@ -21,12 +21,23 @@
       <button
         class="absolute -left-6 top-70 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
         @click="goToPrevious"
-      >&#8592;</button>
+      >
+     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+          class="size-5 font-bold">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+    </button>
 
       <button
         class="absolute -right-6 top-70 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
         @click="goToNext"
-      >&#8594;</button>
+      >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+  class="size-5 font-bold">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+</svg>
+
+    </button>
 
       <!-- Indicators -->
       <div class="mt-6 flex items-center justify-center space-x-2">
