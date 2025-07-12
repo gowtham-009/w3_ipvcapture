@@ -20,8 +20,13 @@
         </button>
       </div>
     </div>
+
+   
     <div class="center-box">
       <div class="scroll-content">
+        <div class="w-full px-10">
+           <HELPCARSOULE class="w-full mt-2" />
+        </div>
         <div class="w-full p-1 px-4 mt-1 flex justify-between  bg-white">
           <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
           <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode.charAt(0).toUpperCase() + clientcode.slice(1) }}</p>
@@ -147,8 +152,8 @@
             enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
             leave-from="opacity-100 translate-y-0 sm:scale-100"
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <DialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+            <DialogPanel style="border: 1px solid red;"
+              class="relative transform overflow-hidden w-full rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all ">
               <div class="w-full flex justify-end">
                 <button type="button"
                   class=" inline-flex  justify-center rounded-md bg-white  text-sm font-semibold text-gray-900   sm:col-start-1 sm:mt-0"
@@ -162,8 +167,9 @@
               </div>
               <div>
 
-                <div class="mt-3 flex justify-center sm:mt-5">
-                  <img src="~/assets/images/imgrule.jpg" alt="Rules">
+                <div class="mt-3 flex px-5 justify-center sm:mt-5">
+                  <!-- <img src="~/assets/images/imgrule.jpg" alt="Rules"> -->
+                   <HELPCARSOULE class="w-full h-screen" />
                 </div>
               </div>
 
@@ -183,7 +189,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { useRouter, useRoute } from 'vue-router';
 import CMAIDENTIFY from '~/components/cmaidentify.vue';
 import LOADING from '~/components/googleloading.vue';
-
+import HELPCARSOULE from '~/components/helpcarsoule.vue';
 
 const cameraComponent = ref(null);
 

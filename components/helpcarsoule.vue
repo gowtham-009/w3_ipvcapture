@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-teal-100 h-screen flex items-center justify-center">
+  <div class="flex items-center justify-center">
     <div class="relative w-full max-w-3xl">
       <!-- Slide Content -->
       <transition name="fade" mode="out-in">
