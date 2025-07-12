@@ -19,12 +19,12 @@
 
       <!-- Prev/Next Buttons -->
       <button
-        class="absolute -left-6 top-80 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
+        class="absolute -left-6 top-70 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
         @click="goToPrevious"
       >&#8592;</button>
 
       <button
-        class="absolute -right-6 top-80 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
+        class="absolute -right-6 top-70 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-full shadow-md hover:text-orange-500 transition"
         @click="goToNext"
       >&#8594;</button>
 
