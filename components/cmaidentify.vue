@@ -235,8 +235,7 @@ const captureImage = () => {
   // Emit to parent
   emit('captured', fullBase64);
 
-  // 👇 OPTIONAL: Call API directly here
-  postToServer(pureBase64);
+  
 };
 
 

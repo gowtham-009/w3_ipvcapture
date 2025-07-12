@@ -1,12 +1,12 @@
 <template>
   <div class="flex items-center justify-center">
-    <div class="relative w-full max-w-3xl">
+    <div class="relative w-full max-w-3xl ">
       <!-- Slide Content -->
       <transition name="fade" mode="out-in">
         <div
           v-if="currentSlide"
           :key="currentSlide.id"
-          class="bg-teal-500 text-white text-3xl font-bold h-64 rounded-xl flex items-center justify-center px-6 text-center"
+          class="bg-teal-500 text-white text-3xl font-bold h-64 rounded-xl  flex items-center justify-center px-6 text-center"
         >
           <div>
             <div v-if="currentSlide.image" class="mb-4">
