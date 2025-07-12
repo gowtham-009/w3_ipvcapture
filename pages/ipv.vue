@@ -5,10 +5,12 @@
           <div class="container !w-full" :style="{ height: deviceHeight + 'px' }">
     <div class="top-box bg-white" :style="{ height: topBoxHeight + 'px' }">
       <div class="w-1/6 flex justify-center items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+      <span  @click="goBack">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
           class="size-5 font-bold">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
+      </span>
       </div>
       <div class="w-5/6 p-1">
         <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
@@ -147,7 +149,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { useRouter, useRoute } from 'vue-router';
 import CMAIDENTIFY from '~/components/cmaidentify.vue';
 import LOADING from '~/components/googleloading.vue';
-import HELPCARSOULE from '~/components/helpcarsoule.vue';
+import HELPCARSOULE from '~/components/adhelpcarsoule.vue';
 
 const cameraComponent = ref(null);
 
@@ -191,28 +193,15 @@ const updateHeight = () => {
   }
 };
 
+const goBack = () => {
+  router.go(-1); 
+};
+
 onMounted(() => {
 
    if (typeof window !== 'undefined') {
-    const queryName = route.query.clientname;
-    const queryCode = route.query.clientcode;
-
-    if (queryName && queryCode) {
-      clientname.value = queryName;
-      clientcode.value = queryCode;
-
-      localStorage.setItem('clientname', queryName);
-      localStorage.setItem('clientcode', queryCode);
-
-      // Clean URL (remove query parameters)
-      if (window.history.replaceState) {
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-    } else {
-      // Load from localStorage fallback
-      clientname.value = localStorage.getItem('clientname') || '';
-      clientcode.value = localStorage.getItem('clientcode') || '';
-    }
+     clientname.value = localStorage.getItem('clientname') || '';
+     clientcode.value = localStorage.getItem('clientcode') || '';
   }
 
 

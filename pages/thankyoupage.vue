@@ -16,9 +16,9 @@
             <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere</p>
           </div>
           <div class="w-1/6 p-1 px-2">
-            <button @click="open = true">
+            <!-- <button @click="open = true">
               <img src="~/assets/images/help-icon.png" alt="Help" width="100" height="100">
-            </button>
+            </button> -->
           </div>
         </div>
         <div class="center-box">
@@ -45,43 +45,7 @@
     </div>
   </div>
 
-  <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="open = false">
-      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
-        leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-        <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
-      </TransitionChild>
-
-      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div class="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
-          <TransitionChild as="template" enter="ease-out duration-300"
-            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
-            leave-from="opacity-100 translate-y-0 sm:scale-100"
-            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <DialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-              <div class="w-full flex justify-end">
-                <button type="button"
-                  class="inline-flex justify-center rounded-md bg-white text-sm font-semibold text-gray-900 sm:col-start-1 sm:mt-0"
-                  @click="open = false" ref="cancelButtonRef">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div>
-                <div class="mt-3 flex justify-center sm:mt-5">
-                  <img src="~/assets/images/imgrule.jpg" alt="Rules">
-                </div>
-              </div>
-            </DialogPanel>
-          </TransitionChild>
-        </div>
-      </div>
-    </Dialog>
-  </TransitionRoot>
+ 
 </template>
 
 <script setup>
