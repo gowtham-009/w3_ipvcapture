@@ -1,31 +1,44 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const isMobile = ref(false)
+const isIOS = ref(false)
+const isAndroid = ref(false)
 
 onMounted(() => {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera
 
-  // Check for Android or iOS
-  if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
-    isMobile.value = true
+  // Detect iOS
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    isIOS.value = true
+  }
+
+  // Detect Android
+  if (/android/i.test(userAgent)) {
+    isAndroid.value = true
   }
 })
 </script>
 
 <template>
   <div>
-    <!-- Desktop view (Windows/Mac/Linux) -->
-    <div v-if="!isMobile">
+    <!-- iOS device -->
+    <div v-if="isIOS">
       <div class="box1">
-        <h2>This is Box 1 (Desktop)</h2>
+        <h2>This is Box 1 (iOS)</h2>
       </div>
     </div>
 
-    <!-- Mobile view (Android/iOS) -->
-    <div v-else>
+    <!-- Android device -->
+    <div v-else-if="isAndroid">
       <div class="box2">
-        <h2>This is Box 2 (Mobile)</h2>
+        <h2>This is Box 2 (Android)</h2>
+      </div>
+    </div>
+
+    <!-- Other devices -->
+    <div v-else>
+      <div class="box-other">
+        <h2>This is another device (not iOS/Android)</h2>
       </div>
     </div>
   </div>
@@ -39,6 +52,11 @@ onMounted(() => {
 }
 .box2 {
   background-color: lightgreen;
+  padding: 20px;
+  margin: 10px;
+}
+.box-other {
+  background-color: lightgray;
   padding: 20px;
   margin: 10px;
 }
