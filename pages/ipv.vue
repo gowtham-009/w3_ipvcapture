@@ -16,11 +16,7 @@
         <p class="text-black font-medium text-lg">In-Person Verification (IPV)</p>
         <p class="text-sm text-gray-500 leading-3.5">Complete verification from anywhere</p>
       </div>
-      <div class="w-1/6 p-1 px-2" >
-        <!-- <button @click="open = true">
-          <img src="~/assets/images/help-icon.png" alt="Help" width="100" height="100">
-        </button> -->
-      </div>
+      
     </div>
 
    
@@ -185,7 +181,7 @@ const route = useRoute()
 
 const deviceHeight = ref(0);
 const topBoxHeight = computed(() => (deviceHeight.value * 0.1)-20);
-const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);;
+const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);
 
 const updateHeight = () => {
   if (typeof window !== 'undefined') {
@@ -200,25 +196,8 @@ const goBack = () => {
 onMounted(() => {
 
    if (typeof window !== 'undefined') {
-    const queryName = route.query.clientname;
-    const queryCode = route.query.clientcode;
-
-    if (queryName && queryCode) {
-      clientname.value = queryName;
-      clientcode.value = queryCode;
-
-      localStorage.setItem('clientname', queryName);
-      localStorage.setItem('clientcode', queryCode);
-
-      // Clean URL (remove query parameters)
-      if (window.history.replaceState) {
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-    } else {
-      // Load from localStorage fallback
-      clientname.value = localStorage.getItem('clientname') || '';
-      clientcode.value = localStorage.getItem('clientcode') || '';
-    }
+     clientname.value = localStorage.getItem('clientname') || '';
+     clientcode.value = localStorage.getItem('clientcode') || '';
   }
 
 
