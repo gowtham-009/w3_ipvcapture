@@ -44,8 +44,8 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updateHeight)
 })
 
-const topBoxHeight = computed(() => deviceHeight.value * 0.08)
-const bottomBoxHeight = computed(() => deviceHeight.value * 0.07)
+const topBoxHeight = computed(() => (deviceHeight.value * 0.1)-20);
+const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);
 const centerBoxHeight = computed(() => deviceHeight.value - topBoxHeight.value - bottomBoxHeight.value)
 
 const handleNext = () => {
