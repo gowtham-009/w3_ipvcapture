@@ -2,43 +2,30 @@
 import { ref, onMounted } from 'vue'
 
 const isIOS = ref(false)
-const isAndroid = ref(false)
 
 onMounted(() => {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera
 
-  // Detect iOS
+  // Check for iOS
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     isIOS.value = true
-  }
-
-  // Detect Android
-  if (/android/i.test(userAgent)) {
-    isAndroid.value = true
   }
 })
 </script>
 
 <template>
   <div>
-    <!-- iOS device -->
+    <!-- Show box1 only on iOS -->
     <div v-if="isIOS">
       <div class="box1">
         <h2>This is Box 1 (iOS)</h2>
       </div>
     </div>
 
-    <!-- Android device -->
-    <div v-else-if="isAndroid">
-      <div class="box2">
-        <h2>This is Box 2 (Android)</h2>
-      </div>
-    </div>
-
-    <!-- Other devices -->
+    <!-- Show box2 on Android, Windows, etc -->
     <div v-else>
-      <div class="box-other">
-        <h2>This is another device (not iOS/Android)</h2>
+      <div class="box2">
+        <h2>This is Box 2 (Android/Windows)</h2>
       </div>
     </div>
   </div>
@@ -46,18 +33,15 @@ onMounted(() => {
 
 <style scoped>
 .box1 {
-  background-color: lightblue;
+  background-color: #d0eaff;
   padding: 20px;
+  border-radius: 8px;
   margin: 10px;
 }
 .box2 {
-  background-color: lightgreen;
+  background-color: #d9ffd9;
   padding: 20px;
-  margin: 10px;
-}
-.box-other {
-  background-color: lightgray;
-  padding: 20px;
+  border-radius: 8px;
   margin: 10px;
 }
 </style>
