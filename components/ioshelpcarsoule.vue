@@ -63,9 +63,9 @@ onBeforeUnmount(() => {
 })
 const carsoule = computed(() => deviceHeight.value *0.8)
 const slides = ref([
-  { id: 1, content: 'Welcome to Slide One' },
-  { id: 2, content: '🌟 Slide Two has stars!' },
-  { id: 3, content: '🎉 Celebrate Slide Three' },
+  { id: 1, content: 'Welcome to Slide One ios' },
+  { id: 2, content: '🌟 Slide Two has stars! ios' },
+  { id: 3, content: '🎉 Celebrate Slide Three ios' },
   { id: 4, content: '📷 Image Slide Four', image: '/image4.jpg' },
   { id: 5, content: '🧠 Final Slide' }
 ])
