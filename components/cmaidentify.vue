@@ -18,7 +18,8 @@
   muted 
   v-show="cameraReady && !imageCaptured && cameraActive" 
   class="camera-video"
-/>      <img v-if="imageCaptured" :src="capturedImage" alt="Captured Face" class="camera-image" />
+/>
+    <img v-if="imageCaptured" :src="capturedImage" alt="Captured Face" class="camera-image" />
       <canvas ref="canvas" class="hidden"></canvas>
 
       <!-- Visual guides -->
@@ -123,16 +124,27 @@ const startCamera = async () => {
     
     // Wait for video to be ready to play
   video.value.onloadedmetadata = async () => {
-  cameraReady.value = true;
-
   try {
-    await video.value.play(); // Explicit call to play for iOS
+    await video.value.play(); // Attempt to play
+    cameraReady.value = true;
+    startDetectionLoop();
   } catch (e) {
-    console.warn('iOS autoplay workaround: forcing play on user gesture.');
+    console.warn('⚠️ video.play() failed on iOS. Retrying silently in 500ms...');
+    setTimeout(async () => {
+      try {
+        await video.value.play();
+        cameraReady.value = true;
+        startDetectionLoop();
+      } catch (err2) {
+        emit('error', {
+          message: 'iOS blocked camera autoplay. Please reload or interact with the screen.'
+        });
+        console.error('Second attempt to play video failed:', err2);
+      }
+    }, 500);
   }
-
-  startDetectionLoop();
 };
+
     
   } catch (err) {
     emit('error', { message: 'Could not access camera: ' + err.message })
