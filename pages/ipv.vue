@@ -442,8 +442,6 @@ const completeProgress = () => {
 const router = useRouter()
 
 
-
-
 const ipvfunction = async () => {
   ipverror.value = false
   if (!imageCaptured.value) {
@@ -454,47 +452,84 @@ const ipvfunction = async () => {
   loadingprogress.value = true
   startProgressAnimation();
 
-
-  const apiurl = "https://gkyc.gwcindia.in/kyc-api/face-liveness.php";
-
+  const apiurl = `https://nnkyc.w3webtechnologies.co.in/api/v1/ipv`;
+  const location = await getCountry();
 
   try {
+    // Fetch binary blob of the captured image
+    const response = await fetch(imageCaptured.value); // imageCaptured should be a blob URL (e.g., from canvas)
+    const blob = await response.blob();
+    const headertoken = 'C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1'
+    // Encrypt metadata
+    const user = await encryptionrequestdata({
+      userToken: sessionStorage.getItem('userkey'),
+      pageCode: "photoproceed",
+      location: `${location.latitute},${location.longitude}`,
+      country: location.conuntryname
+    });
 
+    // Prepare FormData
     const formData = new FormData();
-
-
-    const base64Data = imageCaptured.value.split(',')[1] || imageCaptured.value;
-    formData.append('fileData', base64Data);
+    formData.append('ipvImage', blob, 'ipv.jpg'); // Binary image file
+    formData.append('payload', JSON.stringify({ payload: user }));
 
 
 
     const uploadResponse = await fetch(apiurl, {
       method: 'POST',
-
+      headers: {
+        'Authorization': headertoken,
+        // DO NOT set Content-Type for FormData
+      },
       body: formData,
     });
+
 
 
     if (!uploadResponse.ok) {
       throw new Error(`Network error: ${uploadResponse.status}`);
     }
 
-    const data = await uploadResponse.json();
+    const decryptedData = await uploadResponse.json();
 
-    if (data.is_real == true) {
-      
-      localStorage.setItem('ipv', data.req_id)
+    const data = await decryptionresponse(decryptedData);
+    if (data.payload.status == 'ok') {
       completeProgress();
-      
-      router.push(`/thankyoupage`);
-      // localStorage.removeItem('clientname');
-      // localStorage.removeItem('clientcode');
-    }
-  } catch (error) {
+      if (data.payload.metaData.is_real === 'true' && data.payload.metaData.realValue >= 0.6) {
+       
+        router.push('/thankyoupage')
 
+      } else {
+        visible.value = true
+      }
+    }
+
+
+    else if (data.payload.status == 'error' && data.payload.code == 'L1002') {
+      loadingprogress.value = false
+      ipvlimiterror.value = data.payload.message
+      ipverror.value = true
+
+    }
+
+    else if (data.payload.status == 'error') {
+      if (data.payload.code == '1002' || data.payload.code == '1004') {
+        loadingprogress.value = false
+        alert(data.payload.message);
+        sessionStorage.removeItem('userkey')
+        router.push('/')
+      }
+
+    }
+
+
+
+  } catch (error) {
+    resetProgress();
     console.error('IPv Upload Failed:', error.message);
   }
 };
+
 
 const tryagain = () => {
   window.location.reload();
