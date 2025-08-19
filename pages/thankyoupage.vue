@@ -78,7 +78,7 @@ const base64Id = btoa(id.toString());
  src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
 const routepage=  await pagestatus('signdraw');
 if(routepage.payload.status=='ok'){
-
+  alert('hi');
   window.location.href = `https://nnkyc.w3webtechnologies.co.in/client/ipv-link.php?${base64Id}&ipvcaptured`;
 }
 
