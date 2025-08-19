@@ -74,7 +74,7 @@ const getdata=async()=>{
   const id = mydata.payload.metaData.profile.id || '';
 const base64Id = btoa(id.toString());
 
-alert(base64Id)
+
  src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
 const routepage=  await pagestatus('signdraw');
 if(routepage.payload.status=='ok'){
