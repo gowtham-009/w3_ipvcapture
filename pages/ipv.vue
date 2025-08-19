@@ -533,12 +533,7 @@ const tryagain = () => {
 };
 
 const handleNext = () => {
-  if (localStorage.getItem('clientname') && localStorage.getItem('clientcode')) {
-    ipvfunction()
-  }
-  else {
-    alert('Client code exist')
-  }
+  ipvfunction()
 };
 
 </script>

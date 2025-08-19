@@ -22,19 +22,19 @@ onMounted(() => {
     isIOS.value = true
   }
 
-  if (typeof window !== 'undefined') {
-    const queryName = route.query.clientname
-    const queryCode = route.query.clientcode
+  // if (typeof window !== 'undefined') {
+  //   const queryName = route.query.clientname
+  //   const queryCode = route.query.clientcode
 
-    if (queryName && queryCode) {
-      localStorage.setItem('clientname', queryName)
-      localStorage.setItem('clientcode', queryCode)
+  //   if (queryName && queryCode) {
+  //     localStorage.setItem('clientname', queryName)
+  //     localStorage.setItem('clientcode', queryCode)
 
-      if (window.history.replaceState) {
-        window.history.replaceState({}, '', window.location.pathname)
-      }
-    }
-  }
+  //     if (window.history.replaceState) {
+  //       window.history.replaceState({}, '', window.location.pathname)
+  //     }
+  //   }
+  // }
 
   updateHeight()
   window.addEventListener('resize', updateHeight)
@@ -49,11 +49,8 @@ const bottomBoxHeight = computed(() =>(deviceHeight.value * 0.1) - 20);
 const centerBoxHeight = computed(() => deviceHeight.value - topBoxHeight.value - bottomBoxHeight.value)
 
 const handleNext = () => {
-  if (localStorage.getItem('clientname') && localStorage.getItem('clientcode')) {
-    router.push('/ipv')
-  } else {
-    alert('Client code exist')
-  }
+  router.push('/ipv')
+   
 }
 </script>
 
