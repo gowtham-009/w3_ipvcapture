@@ -45,11 +45,11 @@
           </div>
         </div>
 
-         <div class="" >
+         <!-- <div class="" >
        <button type="button" class="w-full rounded-lg text-white bg-blue-500 px-2 py-3" @click="handleNext">
         Next
       </button>
-    </div>
+    </div> -->
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@ const device = ref('Mobile') // Initialize as Mobile
 const deviceHeight = ref(0);
 
 const topBoxHeight = computed(() => (deviceHeight.value * 0.1) - 20);
-let basevalue
+
 const getdata=async()=>{
  const mydata = await getServerData();
  if(mydata.payload.status=='ok'){
@@ -82,9 +82,16 @@ const getdata=async()=>{
 
   const id = mydata.payload.metaData.profile.id || '';
 const base64Id = btoa(id.toString());
- basevalue = base64Id
- src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
 
+
+ src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
+const routepage=  await pagestatus('signdraw');
+if(routepage.payload.status=='ok'){
+  
+ setTimeout(() => {
+   window.location.href = `https://nnkyc.w3webtechnologies.co.in/client/ipv-link.php?${base64Id}&ipvcaptured`;
+ },5000);
+}
 
  }
 
@@ -118,12 +125,7 @@ onBeforeUnmount(() => {
   }
 });
 
-const handleNext=async()=>{
-const routepage=  await pagestatus('signdraw');
-if(routepage.payload.status=='ok'){
-  window.location.href = `https://nnkyc.w3webtechnologies.co.in/client/ipv-link.php?${basevalue}&ipvcaptured`;
-}
-}
+const handleNext=()=>{}
 </script>
 
 <style scoped>
