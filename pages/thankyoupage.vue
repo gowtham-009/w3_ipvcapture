@@ -65,11 +65,19 @@ const topBoxHeight = computed(() => (deviceHeight.value * 0.1) - 20);
 
 const getdata=async()=>{
  const mydata = await getServerData();
- clientname.value = mydata.payload.metaData.profile.clientName || '';
+ if(mydata.payload.status=='ok'){
+   clientname.value = mydata.payload.metaData.profile.clientName || '';
  clientcode.value =  mydata.payload.metaData.profile.clientCode || '';
   const userToken = sessionStorage.getItem('userkey');
   const ipv = mydata.payload.metaData.proofs.ipvImg || '';
   src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
+const routepage=  await pagestatus('signdraw');
+if(routepage.payload.status=='ok'){
+
+  window.location.href = 'https://nnkyc.w3webtechnologies.co.in/client/signature.php';
+}
+
+ }
 
 }
 
@@ -87,7 +95,7 @@ const goBack = () => {
 
 onMounted(async () => {
   await getdata();
-  await pagestatus('signdraw');
+  
   
   updateHeight();
   window.addEventListener('resize', updateHeight);
