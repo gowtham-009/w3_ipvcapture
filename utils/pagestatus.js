@@ -9,7 +9,7 @@ export async function pagestatus(pagecode) {
   const encryptedUser = await encryptionrequestdata({
     userToken: userkey,
     pageCode: pagecode,
- 
+    profileCode: 0
   });
 
   const payload = { payload: encryptedUser };
