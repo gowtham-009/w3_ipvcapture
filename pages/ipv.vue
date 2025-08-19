@@ -193,11 +193,16 @@ const goBack = () => {
   router.go(-1); 
 };
 
-onMounted(() => {
+const getdata=async()=>{
+ const mydata = await getServerData();
+ clientname.value = mydata.payload.metaData.profile.clientName || '';
+ clientcode.value =  mydata.payload.metaData.profile.clientCode || '';
+}
 
+onMounted(async() => {
+  
    if (typeof window !== 'undefined') {
-     clientname.value = localStorage.getItem('clientname') || '';
-     clientcode.value = localStorage.getItem('clientcode') || '';
+   await getdata()
   }
 
 
