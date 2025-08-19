@@ -12,7 +12,7 @@
 <script setup>
 import { onMounted} from 'vue';
 
-const {htoken}=headerToken()
+
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
