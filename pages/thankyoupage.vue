@@ -70,7 +70,7 @@ const getdata=async()=>{
   const userToken = sessionStorage.getItem('userkey');
   const ipv = mydata.payload.metaData.proofs.ipvImg || '';
   src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
-const pagestatus = await pagestatus('signdraw');
+
 }
 
 const updateHeight = () => {
@@ -87,6 +87,7 @@ const goBack = () => {
 
 onMounted(async () => {
   await getdata();
+  await pagestatus('signdraw');
   
   updateHeight();
   window.addEventListener('resize', updateHeight);
