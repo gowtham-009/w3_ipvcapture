@@ -67,9 +67,10 @@ const getdata=async()=>{
  const mydata = await getServerData();
  clientname.value = mydata.payload.metaData.profile.clientName || '';
  clientcode.value =  mydata.payload.metaData.profile.clientCode || '';
-
+  const userToken = sessionStorage.getItem('userkey');
   const ipv = mydata.payload.metaData.proofs.ipvImg || '';
-  src.value = `https://gkyc.gwcindia.in/kyc-api/uploads/${ipv}.png`;
+  src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
+
 }
 
 const updateHeight = () => {
