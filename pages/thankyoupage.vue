@@ -50,7 +50,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useRouter, useRoute } from 'vue-router';
 
 const route = useRoute()
@@ -64,6 +63,15 @@ const deviceHeight = ref(0);
 
 const topBoxHeight = computed(() => (deviceHeight.value * 0.1) - 20);
 
+const getdata=async()=>{
+ const mydata = await getServerData();
+ clientname.value = mydata.payload.metaData.profile.clientName || '';
+ clientcode.value =  mydata.payload.metaData.profile.clientCode || '';
+
+  const ipv = mydata.payload.metaData.proofs.ipvImg || '';
+  src.value = `https://gkyc.gwcindia.in/kyc-api/uploads/${ipv}.png`;
+}
+
 const updateHeight = () => {
   if (typeof window !== 'undefined') {
     deviceHeight.value = window.innerHeight;
@@ -76,15 +84,13 @@ const goBack = () => {
   router.go(-1); 
 };
 
-onMounted(() => {
-  clientname.value = localStorage.getItem('clientname') 
-  clientcode.value = localStorage.getItem('clientcode')
+onMounted(async () => {
+  await getdata();
   
   updateHeight();
   window.addEventListener('resize', updateHeight);
 
-  const ipv = localStorage.getItem('ipv');
-  src.value = `https://gkyc.gwcindia.in/kyc-api/uploads/${ipv}.png`;
+ 
 });
 
 onBeforeUnmount(() => {

@@ -140,19 +140,16 @@
 <script setup>
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 import { useRouter, useRoute } from 'vue-router';
 import CMAIDENTIFY from '~/components/cmaidentify.vue';
 import LOADING from '~/components/googleloading.vue';
-import HELPCARSOULE from '~/components/adhelpcarsoule.vue';
 
 const cameraComponent = ref(null);
 
 
 const buttonText = ref("SAVE & PROCEED");
 
-const open = ref(false)
 
 const ipverror = ref(false)
 const ipvlimiterror = ref('')
