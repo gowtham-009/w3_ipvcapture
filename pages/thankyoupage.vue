@@ -27,7 +27,7 @@
               <p class="font-bold text-black text-md">{{ clientname.charAt(0).toUpperCase() + clientname.slice(1) }}</p>
               <p class="font-bold text-gray-500 text-sm">UCC: {{ clientcode.charAt(0).toUpperCase() + clientcode.slice(1) }}</p>
             </div>
-            <div class="bg-white w-full p-2 mt-2">
+            <div class="bg-white w-full p-2 mt-2" >
               <div class="mt-4 p-2 bg-yellow-100 flex justify-center gap-2 text-yellow-700 rounded-lg">
                 <img src="~/assets/images/check.png" width="30" height="30" alt="">
                 <i>Thank you, IPV is completed</i>
@@ -38,9 +38,18 @@
                   <img class="w-70 h-70 rounded-full" :src="src" alt="IPV Image">
                 </div>
               </div>
+
+             
+
             </div>
           </div>
         </div>
+
+         <div class="" >
+       <button type="button" class="w-full rounded-lg text-white bg-blue-500 px-2 py-3" @click="handleNext">
+        Next
+      </button>
+    </div>
       </div>
     </div>
   </div>
@@ -62,7 +71,7 @@ const device = ref('Mobile') // Initialize as Mobile
 const deviceHeight = ref(0);
 
 const topBoxHeight = computed(() => (deviceHeight.value * 0.1) - 20);
-
+let basevalue
 const getdata=async()=>{
  const mydata = await getServerData();
  if(mydata.payload.status=='ok'){
@@ -73,14 +82,9 @@ const getdata=async()=>{
 
   const id = mydata.payload.metaData.profile.id || '';
 const base64Id = btoa(id.toString());
-
-
+ basevalue = base64Id
  src.value = `https://nnkyc.w3webtechnologies.co.in/api/v1/view/uploads/C58EC6E7053B95AEF7428D9C7A5DB2D892EBE2D746F81C0452F66C8920CDB3B1/${userToken}/${ipv}`;
-const routepage=  await pagestatus('signdraw');
-if(routepage.payload.status=='ok'){
-  alert('hi');
-  window.location.href = `https://nnkyc.w3webtechnologies.co.in/client/ipv-link.php?${base64Id}&ipvcaptured`;
-}
+
 
  }
 
@@ -113,6 +117,13 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateHeight);
   }
 });
+
+const handleNext=async()=>{
+const routepage=  await pagestatus('signdraw');
+if(routepage.payload.status=='ok'){
+  window.location.href = `https://nnkyc.w3webtechnologies.co.in/client/ipv-link.php?${basevalue}&ipvcaptured`;
+}
+}
 </script>
 
 <style scoped>
